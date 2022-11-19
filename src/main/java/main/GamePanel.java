@@ -1,36 +1,50 @@
 package main;
 
+import entity.Entity;
 import entity.Player;
+import entity.PokeNPC;
+import object.SuperObject;
 import tile.TileManager;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.TileObserver;
+import java.util.ArrayList;
 
 public class GamePanel extends JPanel implements Runnable {
 
-    //Screen Settings
+    // SCREEN SETTINGS
     final int originalTileSize = 24; //16x16 tile
     final int scale = 2;
 
    public final int tileSize = originalTileSize * scale; //makes tile 48x48
 
-    public final int maxScreenCol = 18;
-    public final int maxScreenRow = 14;
+    public final int maxScreenCol = 16;
+    public final int maxScreenRow = 12;
     public final int screenWidth = tileSize * maxScreenCol; //768px
     public final int screenHeight = tileSize * maxScreenRow; //576px
 
-    public final int maxWorldCol = 40;
-    public final int maxWorldRow = 40;
-    public final int worldWidth = tileSize * maxScreenCol;
-    public final int worldHeight = tileSize * maxScreenRow;
-
+    public final int maxWorldCol = 100;
+    public final int maxWorldRow = 100;
     int FPS = 60;
 
-    KeyHandler keyH = new KeyHandler();
-    Thread gameThread;
-    public Player player = new Player(this,keyH);
+    // SYSTEM
     TileManager tileM = new TileManager(this);
+    KeyHandler keyH = new KeyHandler(this);
+    public Sound music = new Sound();
+    public Sound soundFX = new Sound();
+    public CollisionDetector collisionDetector = new CollisionDetector(this);
+    public AssetSetter assetSetter = new AssetSetter(this);
+    public UI ui = new UI(this);
+    Thread gameThread;
+
+    // ENTITY AND OBJECT
+    public Player player = new Player(this,keyH);
+    public ArrayList<SuperObject> obj = new ArrayList<>();
+    public ArrayList<Entity> pokemon = new ArrayList<>();
+    public ArrayList<Entity> caughtPokemon = new ArrayList<>();
+
+    // GAME STATE
+    public boolean isPaused = false;
 
 
     public GamePanel(){
@@ -39,6 +53,13 @@ public class GamePanel extends JPanel implements Runnable {
         this.setDoubleBuffered(true);
         this.addKeyListener(keyH);
         this.setFocusable(true);
+    }
+
+    public void gameSetup(){
+
+        assetSetter.placeObject();
+        assetSetter.setNPC();
+        playMusic("main_theme");
     }
 
     public void startGameThread (){
@@ -76,7 +97,7 @@ public class GamePanel extends JPanel implements Runnable {
             }
 
             if(timer >= 1000000000){
-                System.out.println("FPS:" + drawCount);
+//                System.out.println("FPS:" + drawCount);
                 drawCount = 0;
                 timer = 0;
             }
@@ -85,20 +106,82 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void update(){
 
-        player.update();
+        if(!isPaused){
+            //PLAYER
+            player.update();
+            //NPC
+            for(Entity entity : pokemon){
+                if (entity != null){
+                    entity.update();
+                }
+            }
+        } else {
+            ui.message = "PAUSED";
+            ui.messageOn = true;
+        }
 
     }
+    @Override
     public void paintComponent(Graphics g){
 
         super.paintComponent(g);
-
         Graphics2D g2 = (Graphics2D) g;
+
+        // DEBUG
+        long drawStart = 0;
+        if (keyH.debugCheckDrawTime){
+            drawStart = System.nanoTime();
+        }
+
+        // TILES
         tileM.draw(g2);
 
+        // OBJECTS
+        for(SuperObject obj : obj){
+            if(obj != null){
+                obj.draw(g2, this);
+            }
+        }
+        // POKEMON
+        for (Entity poke : pokemon){
+            if (poke != null){
+                poke.draw(g2);
+            }
+        }
+        // PLAYER
         player.draw(g2);
+
+        // UI
+        ui.draw(g2);
+
+        long drawEnd = 0;
+        if (keyH.debugCheckDrawTime) {
+            drawEnd = System.nanoTime();
+            long timeToDraw = drawEnd-drawStart;
+
+            g2.setColor(Color.WHITE);
+            g2.drawString("Draw Time: " + timeToDraw, 10, 400);
+            System.out.println("Draw Time: " + timeToDraw);
+        }
+
 
         g2.dispose();
 
+    }
 
+    public void playMusic(String fileName){
+
+        music.setFile(fileName);
+        music.play();
+        music.loop();
+    }
+
+    public void stopMusic(){
+        music.stop();
+    }
+
+    public void playSoundFX(String fileName){
+        soundFX.setFile(fileName);
+        soundFX.play();
     }
 }

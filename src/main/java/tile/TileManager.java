@@ -1,6 +1,7 @@
 package tile;
 
 import main.GamePanel;
+import main.UtilTool;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -8,94 +9,94 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 public class TileManager {
 
     GamePanel gp;
-    Tile[] tile;
-    int mapTileNum[][];
+    public ArrayList<Tile> tile = new ArrayList<>();
+    public int[][] mapTileNum;
 
     public TileManager(GamePanel gp){
         this.gp = gp;
 
-        tile = new Tile[50];
         mapTileNum = new int[gp.maxWorldCol][gp.maxWorldRow];
 
         getTileImage();
-        loadMap("/maps/Map Files/map02.txt");
+        loadMap("/maps/Map Files/map03.txt");
     }
 
     public void getTileImage(){
 
-        try{
-            tile[0] = new Tile();
-            tile[0].image = ImageIO.read(getClass().getResourceAsStream("/tiles/grass.png"));
+/* 0 */     setup(0,"Grass", "grass", false);
+/* 1 */     setup(1,"Water", "water", false);
+/* 2 */     setup(2, "Fence", "fence", true);
+/* 3 */     setup(3,"Sand", "sand", false);
+/* 4 */     setup(4,"Gravel", "gravel", false);
+/* 5 */     setup(5,"Tree", "tree", true);
+/* 6 */     setup(6,"Bottom Left Water", "water_bottom_left", true);
+/* 7 */     setup(7,"Left Water", "water_left", true);
+/* 8 */     setup(8,"Top Left Water", "water_top_left", true);
+/* 9 */     setup(9, "Top Water Edge", "water_top", true);
+/* 10 */    setup(10, "Top Right Water Edge", "water_top_right", true);
+/* 11 */    setup(11,"Right Water Edge", "water_right", true);
+/* 12 */    setup(12,"Bottom Right Water Edge", "water_bottom_right", true);
+/* 13 */    setup(13,"Bottom Water Edge", "water_bottom_edge", true);
+/* 14 */    setup(14,"Bottom Left Water Inside Edge", "water_inside_bottom_left", true);
+/* 15 */    setup(15,"Left Water Inside Edge", "water_inside_left", true);
+/* 16 */    setup(16,"Top Left Water Inside Edge", "water_inside_top_left", true);
+/* 17 */    setup(17,"Top Water Inside Edge", "water_inside_top", true);
+/* 18 */    setup(18,"Top Right Water Inside Edge", "water_inside_top_right", true);
+/* 19 */    setup(19,"Right Water Inside Edge", "water_inside_right", true);
+/* 20 */    setup(20,"Bottom Right Water Inside Edge", "water_inside_bottom_right", true);
+/* 21 */    setup(21,"Bottom Water Inside Edge", "water_inside_bottom", true);
+/* 22 */    setup(22, "Bottom Left Fence", "fence_bottom_left", true);
+/* 23 */    setup(23, "Left Fence", "fence_left", true);
+/* 24 */    setup(24, "Top Left Fence", "fence_top_left", true);
+/* 25 */    setup(25, "Top Fence", "fence_top", true);
+/* 26 */    setup(26, "Top Right Fence", "fence_top_right", true);
+/* 27 */    setup(27, "Right Fence", "fence_right", true);
+/* 28 */    setup(28, "Bottom Right Fence", "fence_bottom_right", true);
+/* 29 */    setup(29, "Flowers", "flowers", false);
+/* 30 */    setup(30, "Left Sand Path", "30_sand_path_left", false);
+/* 31 */    setup(31, "Bottom Left Sand Path", "31_sand_path_bottom_left", false);
+/* 32 */    setup(32, "Bottom Right Sand Path", "32_sand_path_bottom_right", false);
+/* 33 */    setup(33, "Right Sand Path", "33_sand_path_right", false);
+/* 34 */    setup(34, "Top Right Sand Path", "34_sand_path_top_right", false);
+/* 35 */    setup(35, "Top Sand Path", "35_sand_path_top", false);
+/* 36 */    setup(36, "Top Left Sand Path", "36_sand_path_top_left", false);
+/* 37 */    setup(37, "Bottom Sand Path", "37_sand_path_bottom", false);
+/* 38 */    setup(38, "Inside Top Left Sand Path", "38_sand_path_inside_top_left", false);
+/* 39 */    setup(39, "Inside Top Right Sand Path", "39_sand_path_inside_top_right", false);
+/* 40 */    setup(40, "Inside Bottom Left Sand Path", "40_sand_path_inside_bottom_left", false);
+/* 41 */    setup(41, "Inside Bottom Right Sand Path", "41_sand_path_inside_bottom_right", false);
+/* 42 */    setup(42, "Dirt", "42_dirt", false);
+/* 43 */    setup(43, "Left Dirt Path", "43_dirt_path_left", false);
+/* 44 */    setup(44, "Bottom Left Dirt Path", "44_dirt_path_bottom_left", false);
+/* 45 */    setup(45, "Bottom Dirt Path", "45_dirt_path_bottom", false);
+/* 46 */    setup(46, "Bottom Right Dirt Path", "46_dirt_path_bottom_right", false);
+/* 47 */    setup(47, "Right Dirt Path", "47_dirt_path_right", false);
+/* 48 */    setup(48, "Top Right Dirt Path", "48_dirt_path_top_right", false);
+/* 49 */    setup(49, "Top Dirt Path", "49_dirt_path_top", false);
+/* 50 */    setup(50, "Top Left Dirt Path", "50_dirt_path_top_left", false);
+/* 51 */    setup(51, "Inside Top Left Dirt Path", "51_dirt_path_inside_top_left", false);
+/* 52 */    setup(52, "Inside Top Right Dirt Path", "52_dirt_path_inside_top_right", false);
+/* 53 */    setup(53, "Inside Bottom Right Dirt Path", "53_dirt_path_inside_bottom_right", false);
+/* 54 */    setup(54, "Inside Bottom Left Dirt Path", "54_dirt_path_inside_bottom_left", false);
+/* 55 */    setup(55, "Boulder", "55_boulder", true);
 
-            tile[1] = new Tile();
-            tile[1].image = ImageIO.read(getClass().getResourceAsStream("/tiles/water.png"));
+    }
 
-            tile[2] = new Tile();
-            tile[2].image = ImageIO.read(getClass().getResourceAsStream("/tiles/fence.png"));
+    public void setup(int index, String tileName, String fileName, boolean collision){
+        UtilTool uTool = new UtilTool();
 
-            tile[3] = new Tile();
-            tile[3].image = ImageIO.read(getClass().getResourceAsStream("/tiles/sand.png"));
-
-            tile[4] = new Tile();
-            tile[4].image = ImageIO.read(getClass().getResourceAsStream("/tiles/gravel.png"));
-
-            tile[5] = new Tile();
-            tile[5].image = ImageIO.read(getClass().getResourceAsStream("/tiles/tree.png"));
-
-            tile[6] = new Tile();
-            tile[6].image = ImageIO.read(getClass().getResourceAsStream("/tiles/water_bottom_left.png"));
-
-            tile[7] = new Tile();
-            tile[7].image = ImageIO.read(getClass().getResourceAsStream("/tiles/water_left.png"));
-
-            tile[8] = new Tile();
-            tile[8].image = ImageIO.read(getClass().getResourceAsStream("/tiles/water_top_left.png"));
-
-            tile[9] = new Tile();
-            tile[9].image = ImageIO.read(getClass().getResourceAsStream("/tiles/water_top.png"));
-
-            tile[10] = new Tile();
-            tile[10].image = ImageIO.read(getClass().getResourceAsStream("/tiles/water_top_right.png"));
-
-            tile[11] = new Tile();
-            tile[11].image = ImageIO.read(getClass().getResourceAsStream("/tiles/water_right.png"));
-
-            tile[12] = new Tile();
-            tile[12].image = ImageIO.read(getClass().getResourceAsStream("/tiles/water_bottom_right.png"));
-
-            tile[13] = new Tile();
-            tile[13].image = ImageIO.read(getClass().getResourceAsStream("/tiles/water_bottom_edge.png"));
-
-            tile[14] = new Tile();
-            tile[14].image = ImageIO.read(getClass().getResourceAsStream("/tiles/water_inside_bottom_left.png"));
-
-            tile[15] = new Tile();
-            tile[15].image = ImageIO.read(getClass().getResourceAsStream("/tiles/water_inside_left.png"));
-
-            tile[16] = new Tile();
-            tile[16].image = ImageIO.read(getClass().getResourceAsStream("/tiles/water_inside_top_left.png"));
-
-            tile[17] = new Tile();
-            tile[17].image = ImageIO.read(getClass().getResourceAsStream("/tiles/water_inside_top.png"));
-
-            tile[18] = new Tile();
-            tile[18].image = ImageIO.read(getClass().getResourceAsStream("/tiles/water_inside_top_right.png"));
-
-            tile[19] = new Tile();
-            tile[19].image = ImageIO.read(getClass().getResourceAsStream("/tiles/water_inside_right.png"));
-
-            tile[20] = new Tile();
-            tile[20].image = ImageIO.read(getClass().getResourceAsStream("/tiles/water_inside_bottom_right.png"));
-
-            tile[21] = new Tile();
-            tile[21].image = ImageIO.read(getClass().getResourceAsStream("/tiles/water_inside_bottom.png"));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        try {
+            tile.add(new Tile(tileName, ImageIO.read(getClass().getResourceAsStream("/tiles/" + fileName + ".png")), collision));
+            tile.get(index).image = uTool.scaleImage(tile.get(index).image, gp.tileSize, gp.tileSize);
+        } catch (IOException e){
+            e.printStackTrace();
         }
+
     }
 
     public void loadMap(String filePath){
@@ -112,7 +113,7 @@ public class TileManager {
                 String line = br.readLine();
 
                 while(col < gp.maxWorldCol){
-                    String numbers[] = line.split(" ");
+                    String[] numbers = line.split(",");
 
                     int num = Integer.parseInt(numbers[col]);
 
@@ -150,7 +151,7 @@ public class TileManager {
                 worldX - (gp.tileSize*2) < gp.player.worldX + gp.player.screenX &&
                 worldY + (gp.tileSize*2) > gp.player.worldY - gp.player.screenY &&
                 worldY - (gp.tileSize*2) < gp.player.worldY + gp.player.screenY){
-                g2.drawImage(tile[tileNum].image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+                g2.drawImage(tile.get(tileNum).image, screenX, screenY, null);
 
             }
             worldCol++;

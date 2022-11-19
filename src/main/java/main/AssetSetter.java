@@ -1,0 +1,31 @@
+package main;
+
+import entity.PokeNPC;
+import object.KeyObject;
+
+public class AssetSetter {
+
+    GamePanel gp;
+
+    public AssetSetter(GamePanel gp){
+        this.gp = gp;
+    }
+
+    public void placeObject(){
+
+        gp.obj.add(new KeyObject(65 * gp.tileSize, 74 * gp.tileSize));
+        gp.obj.add(new KeyObject(24 * gp.tileSize, 72 * gp.tileSize));
+        gp.obj.add(new KeyObject(14 * gp.tileSize, 37 * gp.tileSize));
+        gp.obj.add(new KeyObject(12 * gp.tileSize, 12 * gp.tileSize));
+        gp.obj.add(new KeyObject(75 * gp.tileSize, 15 * gp.tileSize));
+
+    }
+
+    public void setNPC(){
+
+        gp.pokemon.add(new PokeNPC(gp, "gastly", 63,54));
+        gp.pokemon.add(new PokeNPC(gp, "pikachu", 35, 34));
+        gp.pokemon.add(new PokeNPC(gp, "treecko", 45,61));
+        gp.pokemon.add(new PokeNPC(gp, "voltorb", 63,38));
+    }
+}
