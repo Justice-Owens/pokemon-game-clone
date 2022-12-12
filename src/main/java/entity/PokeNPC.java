@@ -4,6 +4,7 @@ import main.GamePanel;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.Random;
@@ -21,6 +22,7 @@ public class PokeNPC extends Entity{
         this.name = pokeName;
 
         getImage(pokeName);
+        getSprite(pokeName);
 
         solidArea = new Rectangle(8 ,16,32,32);
     }
@@ -28,6 +30,14 @@ public class PokeNPC extends Entity{
 
         try{
             image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/npc/" + pokeName + ".png")));
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void getSprite(String pokeName){
+        try{
+            sprite = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/sprite/" + pokeName + ".png")));
 
         } catch (IOException e) {
             throw new RuntimeException(e);

@@ -29,7 +29,7 @@ public class TileManager {
     public void getTileImage(){
 
 /* 0 */     setup(0,"Grass", "grass", false);
-/* 1 */     setup(1,"Water", "water", false);
+/* 1 */     setup(1,"Water", "water", true);
 /* 2 */     setup(2, "Fence", "fence", true);
 /* 3 */     setup(3,"Sand", "sand", false);
 /* 4 */     setup(4,"Gravel", "gravel", false);
@@ -84,6 +84,18 @@ public class TileManager {
 /* 53 */    setup(53, "Inside Bottom Right Dirt Path", "53_dirt_path_inside_bottom_right", false);
 /* 54 */    setup(54, "Inside Bottom Left Dirt Path", "54_dirt_path_inside_bottom_left", false);
 /* 55 */    setup(55, "Boulder", "55_boulder", true);
+/* 56 */    setup(56, "Left Beach", "56_left_beach", false);
+/* 57 */    setup(57, "Bottom left Beach", "57_bottom_left_beach", false);
+/* 58 */    setup(58, "Bottom Beach", "58_bottom_beach", false);
+/* 59 */    setup(59, "Bottom Right Beach", "59_bottom_right_beach", false);
+/* 60 */    setup(60, "Right Beach", "60_right_beach", false);
+/* 61 */    setup(61, "Top Right Beach", "61_top_right_beach", false);
+/* 62 */    setup(62, "Top Beach", "62_top_beach", false);
+/* 63 */    setup(63, "Top Left Beach", "63_top_left_beach", false);
+/* 64 */    setup(64, "Inside Top Left Beach", "64_inside_top_left_beach", false);
+/* 65 */    setup(65, "Inside Bottom Left Beach", "65_inside_bottom_left_beach", false);
+/* 66 */    setup(66, "Inside Bottom Right Beach", "66_inside_bottom_right_beach", false);
+/* 67 */    setup(67, "Inside Top Right Beach", "67_inside_top_right_beach", false);
 
     }
 

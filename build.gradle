@@ -13,21 +13,22 @@ repositories {
 }
 
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+
 }
 
-test {
-    useJUnitPlatform()
-}
 jar {
-    manifest {
-        attributes "Main-Class": "main.Main"
+
+    from('src/main/resources') {
+        include '**/*.*'
     }
 
-    from {
-        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    manifest {
+        attributes (
+                "Main-Class": "main.Main"
+        )
     }
+
+    baseName = 'Game Thing'
 }
 application {
     mainClassName = 'main.Main'
