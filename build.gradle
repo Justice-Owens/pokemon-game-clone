@@ -1,8 +1,13 @@
+<<<<<<< HEAD
 
 plugins {
     id 'java'
     id 'application'
 
+=======
+plugins {
+    id 'java'
+>>>>>>> b801781f825072863cbaa6913fc85ef4936db7fc
 }
 
 group 'org.example'
@@ -13,6 +18,7 @@ repositories {
 }
 
 dependencies {
+<<<<<<< HEAD
 
 }
 
@@ -32,4 +38,12 @@ jar {
 }
 application {
     mainClassName = 'main.Main'
+=======
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+}
+
+test {
+    useJUnitPlatform()
+>>>>>>> b801781f825072863cbaa6913fc85ef4936db7fc
 }
