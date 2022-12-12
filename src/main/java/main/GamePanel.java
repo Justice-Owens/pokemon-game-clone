@@ -30,8 +30,8 @@ public class GamePanel extends JPanel implements Runnable {
     // SYSTEM
     TileManager tileM = new TileManager(this);
     KeyHandler keyH = new KeyHandler(this);
-    public Sound music = new Sound();
-    public Sound soundFX = new Sound();
+    public Sound music = new Sound(true, false);
+    public Sound soundFX = new Sound(false, true);
     public CollisionDetector collisionDetector = new CollisionDetector(this);
     public AssetSetter assetSetter = new AssetSetter(this);
     public UI ui = new UI(this);
@@ -45,6 +45,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     // GAME STATE
     public boolean isPaused = false;
+    public boolean isBattle = false;
 
 
     public GamePanel(){
@@ -106,6 +107,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void update(){
 
+        //PLAY STATE
         if(!isPaused){
             //PLAYER
             player.update();
@@ -115,11 +117,11 @@ public class GamePanel extends JPanel implements Runnable {
                     entity.update();
                 }
             }
-        } else {
-            ui.message = "PAUSED";
-            ui.messageOn = true;
+        //PAUSE STATE
         }
-
+        if(isBattle){
+//            ui.drawBattleScene();
+        }
     }
     @Override
     public void paintComponent(Graphics g){
@@ -168,6 +170,7 @@ public class GamePanel extends JPanel implements Runnable {
         g2.dispose();
 
     }
+
 
     public void playMusic(String fileName){
 

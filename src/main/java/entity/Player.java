@@ -7,6 +7,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Random;
 
 public class Player extends Entity {
 
@@ -28,6 +29,7 @@ public class Player extends Entity {
 
         setDefaultValue();
         getPlayerImage();
+        getPlayerSprite();
     }
 
     public void getPlayerImage(){
@@ -52,6 +54,13 @@ public class Player extends Entity {
 
     }
 
+    public void getPlayerSprite(){
+        try {
+            sprite = ImageIO.read(getClass().getResource("/sprite/player_back.png"));
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 
     public void setDefaultValue(){
 
@@ -123,13 +132,18 @@ public class Player extends Entity {
 
             switch (objectName){
                 case "key":
-                    hasKey++;
+                    Random random = new Random();
+                    int randomIncrease = random.nextInt(4);
+                    if(randomIncrease <= 1){
+                        hasKey++;
+                        gp.ui.showMessage("I found a pokeball!");
+                    } else {
+                        hasKey += randomIncrease;
+                        gp.ui.showMessage("I found " + randomIncrease + " pokeballs!");
+                    }
                     gp.obj.remove(index);
                     // lower volume or pause music before playing SFX and then returning to original volume
-
                     gp.playSoundFX("receive-item");
-                    gp.ui.showMessage("I found a pokeball!");
-
                     break;
                 case "door":
                     if(hasKey > 0){
@@ -150,35 +164,28 @@ public class Player extends Entity {
             if (hasKey > 0) {
                 switch (pokeName) {
                     case "gastly" -> {
-                        gp.caughtPokemon.add(gp.pokemon.get(index));
-                        gp.pokemon.remove(index);
-                        hasKey--;
-                        gp.ui.showMessage("I caught a Gastly!");
+                        gp.ui.startBattle(gp.pokemon.get(index), this, index);
+                        gp.playSoundFX("gastly");
                     }
                     case "treecko" -> {
-                        gp.caughtPokemon.add(gp.pokemon.get(index));
-                        gp.pokemon.remove(index);
-                        hasKey--;
-                        gp.ui.showMessage("I caught a Treecko!");
+                        gp.ui.startBattle(gp.pokemon.get(index), this, index);
+                        gp.playSoundFX("treecko");
                     }
                     case "pikachu" -> {
-                        gp.caughtPokemon.add(gp.pokemon.get(index));
-                        gp.pokemon.remove(index);
-                        hasKey--;
-                        gp.ui.showMessage("I caught a Pikachu!");
+                        gp.ui.startBattle(gp.pokemon.get(index), this, index);
+                        gp.playSoundFX("pikachu");
                     }
                     case "voltorb" -> {
-                        gp.caughtPokemon.add(gp.pokemon.get(index));
-                        gp.pokemon.remove(index);
-                        hasKey--;
-                        gp.ui.showMessage("I caught a Voltorb!");
+                        gp.ui.startBattle(gp.pokemon.get(index), this, index);
+                        gp.playSoundFX("voltorb");
+                    }case "mudkip" -> {
+                        gp.ui.startBattle(gp.pokemon.get(index), this, index);
+                        gp.playSoundFX("mudkip");
+                    }case "bulbasaur" -> {
+                        gp.ui.startBattle(gp.pokemon.get(index), this, index);
+                        gp.playSoundFX("bulbasaur");
                     }
                 }
-            }
-            if (gp.pokemon.size() <= 0){
-                gp.ui.gameOver = true;
-                gp.stopMusic();
-                gp.playMusic("game-over");
             }
         }
     }
