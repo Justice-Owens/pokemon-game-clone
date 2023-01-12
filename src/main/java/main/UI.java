@@ -1,16 +1,13 @@
 package main;
 
 import entity.Entity;
-import entity.PokeNPC;
 import object.KeyObject;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.geom.Arc2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.text.DecimalFormat;
-import java.util.Iterator;
 
 public class UI {
 
