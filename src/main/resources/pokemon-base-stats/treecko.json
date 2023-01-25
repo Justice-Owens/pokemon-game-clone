@@ -1,0 +1,16 @@
+{
+  "name": "Treecko",
+  "stats": {
+    "hp": "40",
+    "attack": "45",
+    "defense": "35",
+    "specialAttack": "65",
+    "specialDefense": "55",
+    "speed": "70"
+  },
+  "evolution": {
+    "nextEvolution": "Grovyle",
+    "level": "16",
+    "requirements": "none"
+  }
+}

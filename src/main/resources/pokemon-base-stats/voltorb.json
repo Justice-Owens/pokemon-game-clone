@@ -1,0 +1,16 @@
+{
+  "name": "Voltorb",
+  "stats": {
+    "hp": "40",
+    "attack": "30",
+    "defense": "50",
+    "specialAttack": "55",
+    "specialDefense": "55",
+    "speed": "100"
+  },
+  "evolution": {
+    "nextEvolution": "Electrode",
+    "level": "30",
+    "requirements": "none"
+  }
+}

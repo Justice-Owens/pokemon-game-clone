@@ -1,0 +1,16 @@
+{
+  "name": "Mudkip",
+  "stats": {
+    "hp": "50",
+    "attack": "70",
+    "defense": "50",
+    "specialAttack": "50",
+    "specialDefense": "50",
+    "speed": "40"
+  },
+  "evolution": {
+    "nextEvolution": "Marshtomp",
+    "level": "16",
+    "requirements": "none"
+  }
+}

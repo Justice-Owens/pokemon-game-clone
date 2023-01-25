@@ -24,6 +24,7 @@ public class Entity {
     public boolean isSolid = false;
     public int actionLockCounter = 0;
     public String name;
+    private int hp, attack, defense, specialAttack, specialDefense, speedStat, evolutionLevel, currentLevel, currentHP, totalHP;
 
     public Entity(GamePanel gp, String name) {
         this.gp = gp;
@@ -52,4 +53,84 @@ public class Entity {
 
     public void setDefaultValue(){}
 
+
+    public int getCurrentLevel() {
+        return currentLevel;
+    }
+
+    public void setCurrentLevel(int currentLevel) {
+        this.currentLevel = currentLevel;
+    }
+
+    public int getHp() {
+        return hp;
+    }
+
+    public void setHp(int hp) {
+        this.hp = hp;
+    }
+
+    public int getAttack() {
+        return attack;
+    }
+
+    public void setAttack(int attack) {
+        this.attack = attack;
+    }
+
+    public int getDefense() {
+        return defense;
+    }
+
+    public void setDefense(int defense) {
+        this.defense = defense;
+    }
+
+    public int getSpecialAttack() {
+        return specialAttack;
+    }
+
+    public void setSpecialAttack(int specialAttack) {
+        this.specialAttack = specialAttack;
+    }
+
+    public int getSpecialDefense() {
+        return specialDefense;
+    }
+
+    public void setSpecialDefense(int specialDefense) {
+        this.specialDefense = specialDefense;
+    }
+
+    public int getSpeedStat() {
+        return speedStat;
+    }
+
+    public void setSpeedStat(int speedStat) {
+        this.speedStat = speedStat;
+    }
+
+    public int getEvolutionLevel() {
+        return evolutionLevel;
+    }
+
+    public void setEvolutionLevel(int evolutionLevel) {
+        this.evolutionLevel = evolutionLevel;
+    }
+
+    public int getCurrentHP() {
+        return currentHP;
+    }
+
+    public void setCurrentHP(int currentHP) {
+        this.currentHP = currentHP;
+    }
+
+    public int getTotalHP() {
+        return totalHP;
+    }
+
+    public void setTotalHP(int totalHP) {
+        this.totalHP = totalHP;
+    }
 }

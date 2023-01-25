@@ -1,0 +1,16 @@
+{
+  "name": "Gastly",
+  "stats": {
+    "hp": "30",
+    "attack": "35",
+    "defense": "30",
+    "specialAttack": "100",
+    "specialDefense": "35",
+    "speed": "80"
+  },
+  "evolution": {
+    "nextEvolution": "Haunter",
+    "level": "25",
+    "requirements": "none"
+  }
+}

@@ -11,9 +11,16 @@ import java.text.DecimalFormat;
 
 public class UI {
 
+    enum PauseMenuOptions{
+        POKEMON,
+        BAG,
+        EXIT
+    }
+
+    //Variables
     GamePanel gp;
     Graphics2D g2;
-    Font arial_30, arial_40, arial_80B;
+    Font arial_20, arial_30, arial_40, arial_80B;
     BufferedImage image;
     BufferedImage displayBox;
 
@@ -33,10 +40,7 @@ public class UI {
     int throwY = 0;
     int animationCounter = 0;
     int spriteCounter = 0;
-    CatchTool catchTool = new CatchTool(0.8);
-
-
-
+    CatchTool catchTool = new CatchTool(0.9);
 
 
     public UI(GamePanel gp){
@@ -44,6 +48,7 @@ public class UI {
         arial_40 = new Font("Arial", Font.PLAIN, 40);
         arial_80B = new Font("Arial", Font.BOLD, 80);
         arial_30 = new Font("Arial", Font.PLAIN, 30);
+        arial_20 = new Font("Arial", Font.PLAIN, 20);
         KeyObject key = new KeyObject();
         image = key.image;
 
@@ -133,7 +138,7 @@ public class UI {
         }
         if(gp.isPaused && !gp.isBattle){
             drawPauseScreen();
-        } else {}
+        }
 
         if(gp.isBattle){
             gp.isPaused = true;
@@ -143,13 +148,13 @@ public class UI {
     }
 
     public void drawPauseScreen(){
-        g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 80F));
-        g2.setColor(Color.WHITE);
-        String text = "PAUSED";
-        int x = getXCenterScreen(text);
-        int y = gp.screenHeight/2;
+        int pauseMenuX = gp.tileSize * 11;
 
-        g2.drawString(text, x, y);
+        drawSubWindow(gp.tileSize * 10, gp.tileSize/2, gp.tileSize * 5, gp.tileSize * 8);
+
+        drawText(PauseMenuOptions.POKEMON.toString(), pauseMenuX, gp.tileSize * 2, arial_30, Color.BLACK);
+        drawText(PauseMenuOptions.BAG.toString(), pauseMenuX, gp. tileSize * 4, arial_30, Color.BLACK);
+        drawText(PauseMenuOptions.EXIT.toString(), pauseMenuX, gp.tileSize * 8, arial_30, Color.BLACK);
     }
 
     public int getXCenterScreen(String text){
@@ -187,6 +192,15 @@ public class UI {
         int pokeBallSpriteX = pokeSpriteX + gp.tileSize;
         int pokeBallSpriteY = pokeSpriteY + gp.tileSize *2;
 
+        //BATTLE HUD
+        drawSubWindow(20,20, gp.tileSize * 8, gp.tileSize * 2);
+
+        drawText(pokemon.name.toUpperCase(),50, gp.tileSize + 15, arial_20, Color.BLACK);
+        drawText("Lvl: " + String.valueOf(pokemon.getCurrentLevel()), 50, gp.tileSize + 40, arial_20, Color.BLACK);
+
+        drawText("HP: ", gp.tileSize * 3, gp.tileSize + 40, arial_20, Color.BLACK);
+
+        drawHealthBar(pokemon.getCurrentHP(), pokemon.getTotalHP(), gp.tileSize * 3 + 40, gp.tileSize + 40);
 
         //POKEMON APPEARS
         if(battlePhase == 0){
@@ -417,5 +431,17 @@ public class UI {
 
     public void drawSprite(BufferedImage image, int x, int y, int width, int height){
         g2.drawImage(image, x, y, width, height, null);
+    }
+
+    public void drawHealthBar(int currentHealth, int totalHealth, int x, int y){
+        if(currentHealth > totalHealth * 0.5){
+            g2.setColor(Color.GREEN);
+        } else if (currentHealth > totalHealth * 0.25){
+            g2.setColor(Color.YELLOW);
+        } else {
+            g2.setColor(Color.RED);
+        }
+
+        g2.fillRect(x, y-15, (gp.tileSize * 4) * (currentHealth/totalHealth), 15);
     }
 }
