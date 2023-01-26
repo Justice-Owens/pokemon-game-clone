@@ -51,8 +51,28 @@ public class KeyHandler implements KeyListener {
             rightPressed = true;
         }
         // SHORTCUTS
-        if (code == KeyEvent.VK_ENTER){
-            gp.isPaused = !gp.isPaused;
+        if (code == KeyEvent.VK_ESCAPE){
+                gp.isPaused = !gp.isPaused;
+        }
+
+        //PAUSE MENU CONTROLS
+        if(gp.isPaused) {
+
+            if(code == KeyEvent.VK_W){
+                upPressed = true;
+            }
+            if(code == KeyEvent.VK_A){
+                leftPressed = true;
+            }
+            if(code == KeyEvent.VK_S){
+                downPressed = true;
+            }
+            if(code == KeyEvent.VK_D){
+                rightPressed = true;
+            }
+            if(code == KeyEvent.VK_ENTER){
+                enterPressed = true;
+            }
         }
 
         //DEBUG

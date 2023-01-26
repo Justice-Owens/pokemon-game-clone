@@ -12,8 +12,13 @@ import java.text.DecimalFormat;
 public class UI {
 
     enum PauseMenuOptions{
+        POKEDEX,
         POKEMON,
         BAG,
+        POKEGEAR,
+        NAME,
+        SAVE,
+        OPTION,
         EXIT
     }
 
@@ -41,6 +46,8 @@ public class UI {
     int animationCounter = 0;
     int spriteCounter = 0;
     CatchTool catchTool = new CatchTool(0.9);
+    private PauseMenuOptions menuSelection = PauseMenuOptions.POKEDEX;
+
 
 
     public UI(GamePanel gp){
@@ -147,14 +154,145 @@ public class UI {
         }
     }
 
-    public void drawPauseScreen(){
+    public void drawPauseScreen() {
+
         int pauseMenuX = gp.tileSize * 11;
+        int pauseSelectX = pauseMenuX - gp.tileSize / 2;
 
-        drawSubWindow(gp.tileSize * 10, gp.tileSize/2, gp.tileSize * 5, gp.tileSize * 8);
+        drawSubWindow(gp.tileSize * 10, gp.tileSize / 2 - 30, gp.tileSize * 5, gp.tileSize * 9);
 
+        drawText(PauseMenuOptions.POKEDEX.toString(), pauseMenuX, gp.tileSize, arial_30, Color.BLACK);
         drawText(PauseMenuOptions.POKEMON.toString(), pauseMenuX, gp.tileSize * 2, arial_30, Color.BLACK);
-        drawText(PauseMenuOptions.BAG.toString(), pauseMenuX, gp. tileSize * 4, arial_30, Color.BLACK);
+        drawText(PauseMenuOptions.POKEGEAR.toString(), pauseMenuX, gp.tileSize * 3, arial_30, Color.BLACK);
+        drawText(PauseMenuOptions.BAG.toString(), pauseMenuX, gp.tileSize * 4, arial_30, Color.BLACK);
+        drawText(PauseMenuOptions.NAME.toString(), pauseMenuX, gp.tileSize * 5, arial_30, Color.BLACK);
+        drawText(PauseMenuOptions.SAVE.toString(), pauseMenuX, gp.tileSize * 6, arial_30, Color.BLACK);
+        drawText(PauseMenuOptions.OPTION.toString(), pauseMenuX, gp.tileSize * 7, arial_30, Color.BLACK);
         drawText(PauseMenuOptions.EXIT.toString(), pauseMenuX, gp.tileSize * 8, arial_30, Color.BLACK);
+
+        switch (menuSelection) {
+            case POKEDEX -> {
+                drawSelectTriangle(pauseSelectX, gp.tileSize - 10);
+                if (gp.keyH.downPressed) {
+                    menuSelection = PauseMenuOptions.POKEMON;
+                    gp.keyH.downPressed = false;
+                }
+                if (gp.keyH.upPressed) {
+                    menuSelection = PauseMenuOptions.EXIT;
+                    gp.keyH.upPressed = false;
+                }
+                if (gp.keyH.enterPressed) {
+                    //TODO: drawPokeDexScreen();
+                    gp.keyH.enterPressed = false;
+                }
+            }
+            case POKEMON -> {
+                drawSelectTriangle(pauseSelectX, gp.tileSize * 2 - 10);
+                if (gp.keyH.downPressed) {
+                    menuSelection = PauseMenuOptions.POKEGEAR;
+                    gp.keyH.downPressed = false;
+                }
+                if (gp.keyH.upPressed) {
+                    menuSelection = PauseMenuOptions.POKEDEX;
+                    gp.keyH.upPressed = false;
+                }
+                if (gp.keyH.enterPressed) {
+                    // TODO: drawPartyScreen();
+                    gp.keyH.enterPressed = false;
+                }
+            }
+            case POKEGEAR -> {
+                drawSelectTriangle(pauseSelectX, gp.tileSize * 3 - 10);
+                if (gp.keyH.downPressed) {
+                    menuSelection = PauseMenuOptions.BAG;
+                    gp.keyH.downPressed = false;
+                }
+                if (gp.keyH.upPressed) {
+                    menuSelection = PauseMenuOptions.POKEMON;
+                    gp.keyH.upPressed = false;
+                }
+                if (gp.keyH.enterPressed) {
+                    //TODO: drawPokeGearScreen();
+                    gp.keyH.enterPressed = false;
+                }
+            }
+            case BAG -> {
+                drawSelectTriangle(pauseSelectX, gp.tileSize * 4 - 10);
+                if (gp.keyH.downPressed) {
+                    menuSelection = PauseMenuOptions.NAME;
+                    gp.keyH.downPressed = false;
+                }
+                if (gp.keyH.upPressed) {
+                    menuSelection = PauseMenuOptions.POKEGEAR;
+                    gp.keyH.upPressed = false;
+                }
+                if (gp.keyH.enterPressed) {
+                    //TODO: drawInventoryScreen();
+                    gp.keyH.enterPressed = false;
+                }
+            }
+            case NAME -> {
+                drawSelectTriangle(pauseSelectX, gp.tileSize * 5 - 10);
+                if (gp.keyH.downPressed) {
+                    menuSelection = PauseMenuOptions.SAVE;
+                    gp.keyH.downPressed = false;
+                }
+                if (gp.keyH.upPressed) {
+                    menuSelection = PauseMenuOptions.BAG;
+                    gp.keyH.upPressed = false;
+                }
+                if (gp.keyH.enterPressed) {
+                    //TODO: drawCharacterStatScreen();
+                    gp.keyH.enterPressed = false;
+                }
+            }
+            case SAVE -> {
+                drawSelectTriangle(pauseSelectX, gp.tileSize * 6 - 10);
+                if (gp.keyH.downPressed) {
+                    menuSelection = PauseMenuOptions.OPTION;
+                    gp.keyH.downPressed = false;
+                }
+                if (gp.keyH.upPressed) {
+                    menuSelection = PauseMenuOptions.NAME;
+                    gp.keyH.upPressed = false;
+                }
+                if (gp.keyH.enterPressed) {
+                    //TODO: saveGame();
+                    gp.keyH.enterPressed = false;
+                }
+            }
+            case OPTION -> {
+                drawSelectTriangle(pauseSelectX, gp.tileSize * 7 - 10);
+                if (gp.keyH.downPressed) {
+                    menuSelection = PauseMenuOptions.EXIT;
+                    gp.keyH.downPressed = false;
+                }
+                if (gp.keyH.upPressed) {
+                    menuSelection = PauseMenuOptions.SAVE;
+                    gp.keyH.upPressed = false;
+                }
+                if (gp.keyH.enterPressed) {
+                    //TODO: drawOptionsMenu();
+                    gp.keyH.enterPressed = false;
+                }
+            }
+            case EXIT -> {
+                drawSelectTriangle(pauseSelectX, gp.tileSize * 8 - 10);
+                if (gp.keyH.downPressed) {
+                    menuSelection = PauseMenuOptions.POKEDEX;
+                    gp.keyH.downPressed = false;
+                }
+                if (gp.keyH.upPressed) {
+                    menuSelection = PauseMenuOptions.OPTION;
+                    gp.keyH.upPressed = false;
+                }
+                if (gp.keyH.enterPressed) {
+                    gp.isPaused = false;
+                    gp.keyH.enterPressed = false;
+                    menuSelection = PauseMenuOptions.POKEDEX;
+                }
+            }
+        }
     }
 
     public int getXCenterScreen(String text){
