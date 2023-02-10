@@ -15,19 +15,24 @@ in the future as I continue to explore Java and implement new features.
 To run the game, either double click on the executable in **/jar_file_for_execution** or open the command prompt inside
 the folder and type the following command
 ```
-java -jar PokemonClone.jar
+java -jar PokemonClone_v{latest_version}.jar
 ```
 
 ## How to Play
 #### In World
 WASD = Movement
 
-Enter = Pause
+Escape = Pause
 
 #### In Battle Screen
 WASD = Menu Select
 
 Enter = Enter
+
+#### In Pause Menu
+WASD = Menu Select
+Enter = Enter
+Escape = Exit
 
 To collect pokeballs simply walk over them and you will find between 1 and 3 pokeballs added to your inventory. Walk into
 a pokemon with pokeballs in your inventory to encounter wild pokemon. 

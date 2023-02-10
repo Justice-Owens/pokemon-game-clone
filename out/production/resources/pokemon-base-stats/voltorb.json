@@ -1,0 +1,19 @@
+{
+  "name": "Voltorb",
+  "stats": {
+    "hp": "40",
+    "attack": "30",
+    "defense": "50",
+    "specialAttack": "55",
+    "specialDefense": "55",
+    "speed": "100",
+    "type1": "ELECTRIC",
+    "type2": "",
+    "description": "Voltorb was first sighted at a company that manufactures Poke Balls. The link between that sighting and the fact that this Pokemon looks very similar to a Poke Ball remains a mystery.\n"
+  },
+  "evolution": {
+    "nextEvolution": "Electrode",
+    "level": "30",
+    "requirements": "none"
+  }
+}

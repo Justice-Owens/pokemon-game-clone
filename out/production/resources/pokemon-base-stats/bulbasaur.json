@@ -1,0 +1,22 @@
+{
+  "name": "Bulbasaur",
+  "stats": {
+    "hp": "45",
+    "attack": "49",
+    "defense": "49",
+    "specialAttack": "65",
+    "specialDefense": "65",
+    "speed": "45",
+    "type1": "GRASS",
+    "type2": "POISON",
+    "description": "Bulbasaur can be seen napping in bright sunlight. There is a seed on its back. By soaking up the sun's rays, the seed grows progressively larger."
+  },
+  "evolution": {
+    "nextEvolution": "Ivysaur",
+    "level": "16",
+    "requirements": "none"
+  },
+  "moves": {
+
+  }
+}
