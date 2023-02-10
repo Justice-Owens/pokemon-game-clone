@@ -17,7 +17,7 @@ public class PokeNPCTest extends TestCase {
         Assert.assertEquals("Bulbasaur stat test special attack = 65", 65, test.getSpecialAttack());
         Assert.assertEquals("Bulbasaur stat test special defense = 65", 65, test.getSpecialDefense());
         Assert.assertEquals("Bulbasaur stat test speed stat = 45", 45, test.getSpeedStat());
-        Assert.assertEquals("Bulbasaur has evolve requirement = false", false, test.isHasEvolveRequirement());
+        Assert.assertEquals("Bulbasaur has evolve requirement = false", false, test.doesHasEvolveRequirement());
         Assert.assertEquals("Bulbasaur evolution requirement = none", "none", test.getEvolutionRequirement());
         Assert.assertEquals("Bulbasaur evolution level = 16", 16, test.getEvolutionLevel());
     }

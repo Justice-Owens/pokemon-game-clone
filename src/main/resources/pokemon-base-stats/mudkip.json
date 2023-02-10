@@ -6,7 +6,10 @@
     "defense": "50",
     "specialAttack": "50",
     "specialDefense": "50",
-    "speed": "40"
+    "speed": "40",
+    "type1": "WATER",
+    "type2": "GROUND",
+    "description": "The fin on Mudkip's head acts as highly sensitive radar. Using this fin to sense movements of water and air, this Pokemon can determine what is taking place around it without using its eyes.\n"
   },
   "evolution": {
     "nextEvolution": "Marshtomp",

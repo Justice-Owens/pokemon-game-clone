@@ -24,7 +24,10 @@ public class Entity {
     public boolean isSolid = false;
     public int actionLockCounter = 0;
     public String name;
+    private boolean hasTwoTypes = false;
+    private String type1, type2, description;
     private int hp, attack, defense, specialAttack, specialDefense, speedStat, evolutionLevel, currentLevel, currentHP, totalHP;
+    private Color backgroundStatColor;
 
     public Entity(GamePanel gp, String name) {
         this.gp = gp;
@@ -132,5 +135,45 @@ public class Entity {
 
     public void setTotalHP(int totalHP) {
         this.totalHP = totalHP;
+    }
+
+    public boolean doesHasTwoTypes() {
+        return hasTwoTypes;
+    }
+
+    public void setHasTwoTypes(boolean hasTwoTypes) {
+        this.hasTwoTypes = hasTwoTypes;
+    }
+
+    public String getType1() {
+        return type1;
+    }
+
+    public void setType1(String type1) {
+        this.type1 = type1;
+    }
+
+    public String getType2() {
+        return type2;
+    }
+
+    public void setType2(String type2) {
+        this.type2 = type2;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Color getBackgroundStatColor() {
+        return backgroundStatColor;
+    }
+
+    public void setBackgroundStatColor(Color backgroundStatColor) {
+        this.backgroundStatColor = backgroundStatColor;
     }
 }

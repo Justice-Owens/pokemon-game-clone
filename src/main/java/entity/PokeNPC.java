@@ -15,7 +15,9 @@ import org.json.simple.*;
 public class PokeNPC extends Entity{
     public String name;
     private boolean hasEvolveRequirement = false;
+    private boolean hasTwoTypes = false;
     private String evolutionRequirement;
+    private String type1, type2, description;
 
     public PokeNPC(GamePanel gp, String pokeName, int worldX, int worldY) {
         super(gp, pokeName);
@@ -71,6 +73,14 @@ public class PokeNPC extends Entity{
             setSpecialAttack(Integer.parseInt((String) statObject.get("specialAttack")));
             setSpecialDefense(Integer.parseInt((String) statObject.get("specialDefense")));
             setSpeedStat(Integer.parseInt((String) statObject.get("speed")));
+            setType1((String) statObject.get("type1"));
+            setType2((String) statObject.get("type2"));
+
+            setDescription((String) statObject.get("description"));
+
+            if(!type2.isBlank()){
+                this.hasTwoTypes = true;
+            }
 
             setEvolutionLevel(Integer.parseInt((String) evolutionObject.get("level")));
             evolutionRequirement = (String) evolutionObject.get("requirements");
@@ -85,6 +95,13 @@ public class PokeNPC extends Entity{
             System.err.println("IOException");
         } catch (ParseException e) {
             System.err.println("Parse Exception");
+        }
+
+        switch (type1){
+            case "GRASS" -> setBackgroundStatColor(new Color(0, 204, 102));
+            case "GHOST" -> setBackgroundStatColor(new Color(96, 70, 107));
+            case "WATER" -> setBackgroundStatColor(new Color(119, 156, 255));
+            case "ELECTRIC" -> setBackgroundStatColor(new Color(255, 255, 51));
         }
     }
 
@@ -135,7 +152,7 @@ public class PokeNPC extends Entity{
     public String getName() {
         return name;
     }
-    public boolean isHasEvolveRequirement() {
+    public boolean doesHasEvolveRequirement() {
         return hasEvolveRequirement;
     }
     public void setHasEvolveRequirement(boolean hasEvolveRequirement) {
@@ -146,5 +163,23 @@ public class PokeNPC extends Entity{
     }
     public void setEvolutionRequirement(String evolutionRequirement) {
         this.evolutionRequirement = evolutionRequirement;
+    }
+    public boolean doesHasTwoTypes() {
+        return hasTwoTypes;
+    }
+    public void setHasTwoTypes(boolean hasTwoTypes) {
+        this.hasTwoTypes = hasTwoTypes;
+    }
+    public String getType1() {
+        return type1;
+    }
+    public void setType1(String type1) {
+        this.type1 = type1;
+    }
+    public String getType2() {
+        return type2;
+    }
+    public void setType2(String type2) {
+        this.type2 = type2;
     }
 }

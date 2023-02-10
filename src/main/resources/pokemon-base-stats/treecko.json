@@ -6,7 +6,10 @@
     "defense": "35",
     "specialAttack": "65",
     "specialDefense": "55",
-    "speed": "70"
+    "speed": "70",
+    "type1": "GRASS",
+    "type2": "",
+    "description": "Treecko has small hooks on the bottom of its feet that enable it to scale vertical walls. This Pokemon attacks by slamming foes with its thick tail.\n"
   },
   "evolution": {
     "nextEvolution": "Grovyle",
