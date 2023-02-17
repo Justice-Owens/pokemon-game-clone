@@ -1,15 +1,13 @@
 package object;
 
-import main.GamePanel;
-
 import javax.imageio.ImageIO;
 import java.io.IOException;
 
-public class KeyObject extends SuperObject{
+public class GroundObject extends SuperObject{
 
 
-    public KeyObject(int worldX, int worldY) {
-        name = "key";
+    public GroundObject(int worldX, int worldY, String name) {
+        this.name = name;
         this.worldX = worldX;
         this.worldY = worldY;
         this.collision = true;
@@ -20,7 +18,7 @@ public class KeyObject extends SuperObject{
             e.printStackTrace();
         }
     }
-    public KeyObject(){
+    public GroundObject(){
         try{
             image = ImageIO.read(getClass().getResourceAsStream("/objects/ground_item.png"));
         } catch (IOException e) {

@@ -1,0 +1,6 @@
+{
+  "type": "Ultra",
+  "catch_modifier": "2.0",
+  "description": "A better Ball with a higher catch rate than a Great Ball.",
+  "image_path": "/items/images/ultraball.png"
+}

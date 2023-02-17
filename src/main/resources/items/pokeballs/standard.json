@@ -1,0 +1,6 @@
+{
+  "type": "standard",
+  "catch_modifier": "1.0",
+  "description": "A Ball thrown to catch a wild Pokemon. It is designed in a capsule style.\n",
+  "image_path": "/items/images/pokeball.png"
+}

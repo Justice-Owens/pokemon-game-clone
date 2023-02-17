@@ -2,6 +2,8 @@ package entity;
 
 import main.GamePanel;
 import main.KeyHandler;
+import util.InventoryManager;
+import item.PokeballType;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -10,10 +12,9 @@ import java.io.IOException;
 import java.util.Random;
 
 public class Player extends Entity {
-
+    public InventoryManager iManager = new InventoryManager(this);
     KeyHandler keyH;
     public final int screenX, screenY;
-    public int hasKey = 5;
 
     public Player(GamePanel gp, KeyHandler keyH){
         super(gp);
@@ -49,7 +50,7 @@ public class Player extends Entity {
             right3 = ImageIO.read(getClass().getResourceAsStream("/player/right_right.png"));
 
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
 
     }
@@ -131,27 +132,19 @@ public class Player extends Entity {
             String objectName = gp.obj.get(index).name;
 
             switch (objectName){
-                case "key":
+                case "pokeball":
                     Random random = new Random();
                     int randomIncrease = random.nextInt(4);
                     if(randomIncrease <= 1){
-                        hasKey++;
+                        iManager.pickupPokeballs(PokeballType.STANDARD, 1);
                         gp.ui.showMessage("I found a pokeball!");
                     } else {
-                        hasKey += randomIncrease;
+                        iManager.pickupPokeballs(PokeballType.STANDARD, randomIncrease);
                         gp.ui.showMessage("I found " + randomIncrease + " pokeballs!");
                     }
                     gp.obj.remove(index);
                     // lower volume or pause music before playing SFX and then returning to original volume
                     gp.playSoundFX("receive-item");
-                    break;
-                case "door":
-                    if(hasKey > 0){
-                        gp.obj.remove(index);
-                        hasKey--;
-                        gp.playSoundFX("door_enter");
-                        gp.ui.showMessage("Door unlocked!");
-                    }
                     break;
             }
         }
@@ -161,7 +154,7 @@ public class Player extends Entity {
         if (index != 999) {
             String pokeName = gp.pokemon.get(index).name;
 
-            if (hasKey > 0) {
+            if (iManager.pokeballsNotEmpty()) {
                 switch (pokeName) {
                     case "gastly" -> {
                         gp.ui.startBattle(gp.pokemon.get(index), this, index);

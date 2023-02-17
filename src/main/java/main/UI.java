@@ -1,14 +1,19 @@
 package main;
 
 import entity.Entity;
-import object.KeyObject;
+import entity.Player;
+import item.Item;
+import item.PokeballItem;
+import object.GroundObject;
+import util.CatchTool;
+import item.PokeballType;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.Objects;
+import java.util.*;
+import java.util.List;
 
 public class UI {
 
@@ -24,6 +29,10 @@ public class UI {
         INNER_MENU
     }
 
+    enum BagScreenWindows{
+        POKEBALLS
+    }
+
     //Variables
     GamePanel gp;
     Graphics2D g2;
@@ -31,7 +40,7 @@ public class UI {
     BufferedImage image;
     BufferedImage displayBox;
     BufferedImage shadow;
-
+    BagScreenWindows currentWindow = BagScreenWindows.POKEBALLS;
 
     public boolean messageOn = false;
     public String message = "";
@@ -51,6 +60,8 @@ public class UI {
     int partyIndex = 0;
     int pageNum = 0;
     CatchTool catchTool;
+    private int itemIndex = 0;
+    private int inventoryIndex = itemIndex;
     private PauseMenuOptions menuSelection = PauseMenuOptions.POKEDEX;
     private boolean displayPokedexScreen = false;
     private boolean displayPartyScreen = false;
@@ -60,6 +71,8 @@ public class UI {
     private boolean displaySaveScreen = false;
     private boolean displayOptionMenu = false;
     private boolean displayPokemonStatScreen = false;
+    private final Color partyBackground = new Color(180, 237, 180),
+            bagBackground = new Color(218, 219, 147);
 
 
     public UI(GamePanel gp){
@@ -69,13 +82,13 @@ public class UI {
         arial_30 = new Font("Arial", Font.PLAIN, 30);
         arial_20 = new Font("Arial", Font.PLAIN, 20);
         arial_20B = new Font("Arial", Font.BOLD, 20);
-        KeyObject key = new KeyObject();
+        GroundObject key = new GroundObject();
         image = key.image;
         catchTool  = new CatchTool(0.9);
 
 
         try {
-            displayBox = ImageIO.read(getClass().getResourceAsStream("/ui/display_box.png"));
+            displayBox = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/display_box.png")));
             shadow = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/sprite/shadow.png")));
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -132,12 +145,6 @@ public class UI {
             // HUD
             this.g2 = g2;
 
-//            g2.setFont(arial_40);
-//            g2.setColor(Color.white);
-//            g2.drawImage(image, gp.tileSize/2, gp.tileSize/2, gp.tileSize, gp.tileSize, null);
-//            g2.drawString(" x " + gp.player.hasKey, 74, 65);
-
-
             // PLAY TIME
             playTime += (double)1/60;
 
@@ -155,13 +162,6 @@ public class UI {
             }
         }
 
-//        g2.drawImage(displayBox, 15 * gp.tileSize - 2, 0, 50, 293, null);
-//
-//        if(gp.caughtPokemon.size() > 0) {
-//            for (int i = 0; i < gp.caughtPokemon.size(); i++) {
-//                g2.drawImage(gp.caughtPokemon.get(i).image, 15 * gp.tileSize, i * gp.tileSize, gp.tileSize, gp.tileSize, null);
-//            }
-//        }
         if(gp.isPaused && !gp.isBattle){
             drawPauseMenu();
             if(displayPokedexScreen){
@@ -177,7 +177,7 @@ public class UI {
                 //TODO: drawPokegearScreen();
             }
             if(displayBagScreen){
-                //TODO: drawBagScreen();
+                drawBagScreen();
             }
             if(displayCharacterStatScreen){
                 //TODO: drawCharacterStatScreen();
@@ -274,7 +274,7 @@ public class UI {
                 }
                 if (gp.keyH.enterPressed) {
                     displayBagScreen = true;
-                    //TODO: drawInventoryScreen();
+                    menuSelection = PauseMenuOptions.INNER_MENU;
                     gp.keyH.enterPressed = false;
                 }
             }
@@ -346,13 +346,7 @@ public class UI {
         }
     }
 
-    public int getXCenterScreen(String text){
-        int textLength = (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth();
-        int x = gp.screenWidth/2 - textLength/2;
-
-        return x;
-    }
-    public void startBattle(Entity pokemon, Entity player, int index){
+    public void startBattle(Entity pokemon, Player player, int index){
         gp.isBattle = true;
         this.pokemon = pokemon;
         this.player = player;
@@ -416,7 +410,7 @@ public class UI {
                 case "RUN" -> drawSelectTriangle(gp.tileSize*13, gp.screenHeight-130);
             }
             if(gp.keyH.enterPressed) {
-                if ((menuSelect.equals("CATCH") && gp.player.hasKey > 0) || menuSelect.equals("RUN")) {
+                if ((menuSelect.equals("CATCH") && gp.player.iManager.getPokeball(PokeballType.STANDARD) > 0) || menuSelect.equals("RUN")) {
                     battlePhase = 2;
                 } else {
                     battlePhase = 7;
@@ -440,7 +434,7 @@ public class UI {
                     if(throwX >= pokeSpriteX) {
                         throwX = gp.tileSize * 4;
                         throwY = gp.tileSize * 5;
-                        gp.player.hasKey--;
+                        gp.player.iManager.throwPokeball(PokeballType.STANDARD);
                         battlePhase = 4;
                     }
                 }
@@ -469,11 +463,11 @@ public class UI {
 
             switch(spriteCounter){
                 case 0 -> g2.drawImage(image, pokeBallSpriteX, pokeBallSpriteY, gp.tileSize/2, gp.tileSize/2, null);
-                case 1 -> g2.drawImage(catchTool.shake1, pokeBallSpriteX, pokeBallSpriteY, gp.tileSize/2, gp.tileSize/2, null);
-                case 2 -> g2.drawImage(catchTool.shake2, pokeBallSpriteX, pokeBallSpriteY, gp.tileSize/2, gp.tileSize/2, null);
-                case 3 -> g2.drawImage(catchTool.shake1, pokeBallSpriteX, pokeBallSpriteY, gp.tileSize/2, gp.tileSize/2, null);
+                case 1 -> g2.drawImage(catchTool.getShake1(), pokeBallSpriteX, pokeBallSpriteY, gp.tileSize/2, gp.tileSize/2, null);
+                case 2 -> g2.drawImage(catchTool.getShake2(), pokeBallSpriteX, pokeBallSpriteY, gp.tileSize/2, gp.tileSize/2, null);
+                case 3 -> g2.drawImage(catchTool.getShake1(), pokeBallSpriteX, pokeBallSpriteY, gp.tileSize/2, gp.tileSize/2, null);
                 case 4 -> g2.drawImage(image, pokeBallSpriteX, pokeBallSpriteY, gp.tileSize/2, gp.tileSize/2, null);
-                case 5 -> g2.drawImage(catchTool.shake3, pokeBallSpriteX, pokeBallSpriteY, gp.tileSize/2, gp.tileSize/2, null);
+                case 5 -> g2.drawImage(catchTool.getShake3(), pokeBallSpriteX, pokeBallSpriteY, gp.tileSize/2, gp.tileSize/2, null);
             }
 
             //POKEBALL SHAKE ANIMATION
@@ -596,7 +590,6 @@ public class UI {
     }
 
     public void drawText(String text, int x, int y, int lineLength, Font fontType, Color color){
-        String lineBreak = "\n";
         StringBuilder stringToDraw = new StringBuilder();
         StringBuilder trimmedLine = new StringBuilder();
         String[] words = text.split(" ");
@@ -665,7 +658,7 @@ public class UI {
         int selectY = gp.tileSize + 15;
 
         g2.fillRect(0, 0, gp.tileSize * 16, gp.tileSize * 12);
-        drawSubWindow(0, 0, gp.tileSize * 16, gp.tileSize * 12);
+        drawSubWindow(0, 0, gp.tileSize * 16, gp.tileSize * 12, partyBackground);
 
         int pokemonWindowX = 15;
         int pokemonWindowY = 12;
@@ -716,21 +709,25 @@ public class UI {
             case 5 -> drawSelectTriangle(selectX, selectY + pokemonWindowYDelta * 5);
         }
 
-        if(gp.keyH.upPressed){
-            if(partyIndex == 0){
-                partyIndex = 5;
-            } else {
-                partyIndex--;
+        if(!gp.caughtPokemon.isEmpty()) {
+            if (gp.keyH.upPressed) {
+                if (partyIndex == 0) {
+                    partyIndex = gp.caughtPokemon.size() - 1;
+                } else {
+                    partyIndex--;
+                }
+                gp.keyH.upPressed = false;
             }
-            gp.keyH.upPressed = false;
-        }
-        if(gp.keyH.downPressed){
-            if(partyIndex == 5){
-                partyIndex = 0;
-            } else {
-                partyIndex++;
+            if (gp.keyH.downPressed) {
+                if (partyIndex == gp.caughtPokemon.size() - 1) {
+                    partyIndex = 0;
+                } else {
+                    partyIndex++;
+                }
+                gp.keyH.downPressed = false;
             }
-            gp.keyH.downPressed = false;
+        } else {
+            partyIndex = 0;
         }
 
         if(gp.keyH.escapePressed){
@@ -740,7 +737,7 @@ public class UI {
             menuSelection = PauseMenuOptions.POKEMON;
         }
 
-        if(gp.keyH.enterPressed && gp.caughtPokemon.size() > 0){
+        if(gp.keyH.enterPressed && partyIndex + 1 <= gp.caughtPokemon.size()){
             displayPokemonStatScreen = true;
             gp.keyH.enterPressed = false;
         }
@@ -824,5 +821,218 @@ public class UI {
             displayPokemonStatScreen = false;
             pageNum = 0;
         }
+    }
+
+    public void drawBagScreen(){
+        //VARIABLES
+        int descriptionX = gp.tileSize/2;
+        int descriptionY = gp.tileSize * 7;
+        int descriptionWidth = gp.tileSize * 8;
+        int descriptionHeight = gp.tileSize * 4 + gp.tileSize/2;
+
+        int descriptionTextX = gp.tileSize;
+        int descriptionTextY = gp.tileSize * 8;
+
+        int inventoryX = gp.tileSize * 9;
+        int inventoryY = gp.tileSize/2;
+        int inventoryWidth = gp.tileSize * 6 + gp.tileSize/2;
+        int inventoryHeight = gp.tileSize * 11;
+
+        int inventoryTextX = gp.tileSize * 10;
+        int inventoryTextY = gp.tileSize + 30;
+
+        int inventorySelectTriX = inventoryTextX - 25;
+        int inventorySelectTriY = inventoryTextY - 5;
+        int inventorySelectTriYDelta = 30;
+
+        int imageX = gp.tileSize * 3;
+        int imageY = gp.tileSize * 2;
+        int imageWidth = gp.tileSize * 2;
+        int imageHeight = gp.tileSize * 2;
+
+        int subBagX = gp.tileSize/2;
+        int subBagY = gp.tileSize * 5 + gp.tileSize/2;
+        int subBagWidth = gp.tileSize * 8;
+        int subBagHeight = gp.tileSize + gp.tileSize/2;
+
+        int subBagTextX = subBagX + gp.tileSize * 2 + 30;
+        int subBagTextY = subBagY + gp.tileSize - 5;
+
+
+        //SUBWINDOWS
+        g2.fillRect(0, 0, gp.tileSize * 16, gp.tileSize * 12);
+        drawSubWindow(0, 0, gp.tileSize * 16, gp.tileSize * 12, bagBackground);
+        drawSubWindow(descriptionX, descriptionY, descriptionWidth, descriptionHeight);
+        drawSubWindow(inventoryX, inventoryY, inventoryWidth, inventoryHeight);
+        drawSubWindow(subBagX, subBagY, subBagWidth, subBagHeight);
+
+        //PERSISTENT METHOD CALLS
+        drawSelectTriangle(inventorySelectTriX, inventorySelectTriY + inventoryIndex * inventorySelectTriYDelta);
+
+        //ITEM WINDOW
+        drawText(currentWindow.toString(), subBagTextX - currentWindow.toString().length()/2, subBagTextY, arial_20B, Color.BLACK);
+        switch (currentWindow) {
+            case POKEBALLS -> {
+                PokeballItem selectedItem;
+                List<String[]> pokeballList = new ArrayList<>();
+                for(Map.Entry<PokeballItem, Integer> entry: gp.player.iManager.getPokeballs().entrySet()) {
+                    pokeballList.add(new String[]{entry.getKey().getTypeName(), String.valueOf(entry.getValue())});
+                }
+                drawPokeballList(pokeballList);
+                switch (pokeballList.get(inventoryIndex + itemIndex)[0]){
+                    case "standard" -> {
+                        selectedItem = new PokeballItem(PokeballType.STANDARD);
+                        drawShadow(imageX - gp.tileSize/2, imageY - gp.tileSize - gp.tileSize/3, imageWidth + gp.tileSize, gp.tileSize * 4);
+                        g2.drawImage(selectedItem.getImage(), imageX, imageY, imageWidth, imageHeight, null);
+                        drawText(selectedItem.getDescription(), descriptionTextX, descriptionTextY, 39, arial_20, Color.BLACK);
+                    }
+                    case "Great" -> {
+                        selectedItem = new PokeballItem(PokeballType.GREAT_BALL);
+                        drawShadow(imageX - gp.tileSize/2, imageY - gp.tileSize - gp.tileSize/3, imageWidth + gp.tileSize, gp.tileSize * 4);
+                        g2.drawImage(selectedItem.getImage(), imageX, imageY, imageWidth, imageHeight, null);
+                        drawText(selectedItem.getDescription(), descriptionTextX, descriptionTextY, 39, arial_20, Color.BLACK);
+                    }
+                    case "Ultra" -> {
+                        selectedItem = new PokeballItem(PokeballType.ULTRA_BALL);
+                        drawShadow(imageX - gp.tileSize/2, imageY - gp.tileSize - gp.tileSize/3, imageWidth + gp.tileSize, gp.tileSize * 4);
+                        g2.drawImage(selectedItem.getImage(), imageX, imageY, imageWidth, imageHeight, null);
+                        drawText(selectedItem.getDescription(), descriptionTextX, descriptionTextY, 39, arial_20, Color.BLACK);
+                    }
+                    case "Master" -> {
+                        selectedItem = new PokeballItem(PokeballType.MASTER_BALL);
+                        drawShadow(imageX - gp.tileSize/2, imageY - gp.tileSize - gp.tileSize/3, imageWidth + gp.tileSize, gp.tileSize * 4);
+                        g2.drawImage(selectedItem.getImage(), imageX, imageY, imageWidth, imageHeight, null);
+                        drawText(selectedItem.getDescription(), descriptionTextX, descriptionTextY, 39, arial_20, Color.BLACK);
+                    }
+                }
+
+
+                //LOGIC FOR NAVIGATING MENU
+                if (gp.keyH.downPressed && inventoryIndex < pokeballList.size() - 1) {
+                    inventoryIndex++;
+                } else if(gp.keyH.downPressed){
+                    itemIndex = 0;
+                    inventoryIndex = 0;
+                }
+                gp.keyH.downPressed = false;
+                if (gp.keyH.upPressed && inventoryIndex > 0) {
+                    inventoryIndex--;
+                } else if (gp.keyH.upPressed){
+                    inventoryIndex = pokeballList.size() - 1;
+                }
+                gp.keyH.upPressed = false;
+            }
+        }
+
+        //DESCRIPTION WINDOW
+        //drawText(, descriptionTextX, descriptionTextY, arial_30, Color.BLACK);
+
+        //EXIT
+        if(gp.keyH.escapePressed){
+            displayBagScreen = false;
+            gp.keyH.escapePressed = false;
+        }
+    }
+
+    public void drawPokeballList(List<String[]> pokeballList){
+        int inventoryX = gp.tileSize * 9;
+        int inventoryTextX = gp.tileSize * 10;
+        int inventoryTextY = gp.tileSize + 30;
+        int inventoryTextXDelta = gp.tileSize * 5;
+
+        if(pokeballList.size() <= 10){
+            for (String[] strings : pokeballList) {
+                if (Integer.parseInt(strings[1]) > 0) {
+                    if (!strings[0].equalsIgnoreCase("STANDARD")) {
+                        drawText(strings[0] + " Ball", inventoryTextX, inventoryTextY, arial_20, Color.BLACK);
+                        drawText(strings[1], inventoryX + inventoryTextXDelta, inventoryTextY, arial_20B, Color.BLACK);
+                    } else {
+                        drawText("Poke Ball", inventoryTextX, inventoryTextY, arial_20, Color.BLACK);
+                        drawText(strings[1], inventoryX + inventoryTextXDelta, inventoryTextY, arial_20B, Color.BLACK);
+                    }
+                    inventoryTextY += 30;
+                }
+            }
+        } else {
+            for (int i = itemIndex; i < pokeballList.size(); i++) {
+                if (Integer.parseInt(pokeballList.get(i)[1]) > 0) {
+                    if (!pokeballList.get(i)[0].equals("STANDARD")) {
+                        drawText(pokeballList.get(i)[0] + " Ball", inventoryTextX, inventoryTextY, arial_20, Color.BLACK);
+                        drawText(pokeballList.get(i)[1], inventoryX + inventoryTextXDelta, inventoryTextY, arial_20B, Color.BLACK);
+                    } else {
+                        drawText("Poke Ball", inventoryTextX, inventoryTextY, arial_20, Color.BLACK);
+                        drawText(pokeballList.get(i)[1], inventoryX + inventoryTextXDelta, inventoryTextY, arial_20B, Color.BLACK);
+                    }
+                    inventoryTextY += 30;
+                }
+                if (i >= inventoryIndex + 10) {
+                    break;
+                }
+            }
+        }
+    }
+
+    public boolean isDisplayPokedexScreen() {
+        return displayPokedexScreen;
+    }
+
+    public void setDisplayPokedexScreen(boolean displayPokedexScreen) {
+        this.displayPokedexScreen = displayPokedexScreen;
+    }
+
+    public boolean isDisplayPartyScreen() {
+        return displayPartyScreen;
+    }
+
+    public void setDisplayPartyScreen(boolean displayPartyScreen) {
+        this.displayPartyScreen = displayPartyScreen;
+    }
+
+    public boolean isDisplayBagScreen() {
+        return displayBagScreen;
+    }
+
+    public void setDisplayBagScreen(boolean displayBagScreen) {
+        this.displayBagScreen = displayBagScreen;
+    }
+
+    public boolean isDisplayPokegearScreen() {
+        return displayPokegearScreen;
+    }
+
+    public void setDisplayPokegearScreen(boolean displayPokegearScreen) {
+        this.displayPokegearScreen = displayPokegearScreen;
+    }
+
+    public boolean isDisplayCharacterStatScreen() {
+        return displayCharacterStatScreen;
+    }
+
+    public void setDisplayCharacterStatScreen(boolean displayCharacterStatScreen) {
+        this.displayCharacterStatScreen = displayCharacterStatScreen;
+    }
+
+    public boolean isDisplaySaveScreen() {
+        return displaySaveScreen;
+    }
+
+    public void setDisplaySaveScreen(boolean displaySaveScreen) {
+        this.displaySaveScreen = displaySaveScreen;
+    }
+
+    public boolean isDisplayOptionMenu() {
+        return displayOptionMenu;
+    }
+
+    public void setDisplayOptionMenu(boolean displayOptionMenu) {
+        this.displayOptionMenu = displayOptionMenu;
+    }
+
+    public boolean isDisplayPokemonStatScreen() {
+        return displayPokemonStatScreen;
+    }
+
+    public void setDisplayPokemonStatScreen(boolean displayPokemonStatScreen) {
+        this.displayPokemonStatScreen = displayPokemonStatScreen;
     }
 }

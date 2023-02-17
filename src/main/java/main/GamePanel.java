@@ -2,9 +2,9 @@ package main;
 
 import entity.Entity;
 import entity.Player;
-import entity.PokeNPC;
 import object.SuperObject;
 import tile.TileManager;
+import util.AssetSetter;
 
 import javax.swing.*;
 import java.awt.*;

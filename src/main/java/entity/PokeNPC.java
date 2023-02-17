@@ -78,7 +78,7 @@ public class PokeNPC extends Entity{
 
             setDescription((String) statObject.get("description"));
 
-            if(!type2.isBlank()){
+            if(type2 != null){
                 this.hasTwoTypes = true;
             }
 
@@ -164,22 +164,43 @@ public class PokeNPC extends Entity{
     public void setEvolutionRequirement(String evolutionRequirement) {
         this.evolutionRequirement = evolutionRequirement;
     }
-    public boolean doesHasTwoTypes() {
+
+    public boolean isHasTwoTypes() {
         return hasTwoTypes;
     }
+
+    @Override
     public void setHasTwoTypes(boolean hasTwoTypes) {
         this.hasTwoTypes = hasTwoTypes;
     }
+
+    @Override
     public String getType1() {
         return type1;
     }
+
+    @Override
     public void setType1(String type1) {
         this.type1 = type1;
     }
+
+    @Override
     public String getType2() {
         return type2;
     }
+
+    @Override
     public void setType2(String type2) {
         this.type2 = type2;
+    }
+
+    @Override
+    public String getDescription() {
+        return description;
+    }
+
+    @Override
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

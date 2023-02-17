@@ -1,4 +1,4 @@
-package main;
+package util;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -6,8 +6,8 @@ import java.io.IOException;
 
 public class CatchTool {
     int catchPhase = 0;
-    Double catchSuccessRate;
-    BufferedImage shake1, shake2, shake3;
+    private Double catchSuccessRate;
+    private BufferedImage shake1, shake2, shake3;
 
     public CatchTool(double catchSuccessRate){
         this.catchSuccessRate = catchSuccessRate;
@@ -25,5 +25,25 @@ public class CatchTool {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public Double getCatchSuccessRate() {
+        return catchSuccessRate;
+    }
+
+    public void setCatchSuccessRate(Double catchSuccessRate) {
+        this.catchSuccessRate = catchSuccessRate;
+    }
+
+    public BufferedImage getShake1() {
+        return shake1;
+    }
+
+    public BufferedImage getShake2() {
+        return shake2;
+    }
+
+    public BufferedImage getShake3() {
+        return shake3;
     }
 }

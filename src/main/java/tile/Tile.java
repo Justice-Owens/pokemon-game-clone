@@ -1,7 +1,5 @@
 package tile;
 
-import main.UtilTool;
-
 import java.awt.image.BufferedImage;
 
 public class Tile {
