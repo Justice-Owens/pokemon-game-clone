@@ -931,6 +931,7 @@ public class UI {
         if(gp.keyH.escapePressed){
             displayBagScreen = false;
             gp.keyH.escapePressed = false;
+            menuSelection = PauseMenuOptions.BAG;
         }
     }
 
