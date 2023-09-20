@@ -29,6 +29,10 @@ public class UI {
         INNER_MENU
     }
 
+    enum OptionMenuOptions{
+        VOLUME
+    }
+
     enum BagScreenWindows{
         POKEBALLS
     }
@@ -59,10 +63,12 @@ public class UI {
     int spriteCounter = 0;
     int partyIndex = 0;
     int pageNum = 0;
+    int pauseSelectY;
     CatchTool catchTool;
     private int itemIndex = 0;
     private int inventoryIndex = itemIndex;
     private PauseMenuOptions menuSelection = PauseMenuOptions.POKEDEX;
+    private OptionMenuOptions optionMenuSelection = OptionMenuOptions.VOLUME;
     private boolean displayPokedexScreen = false;
     private boolean displayPartyScreen = false;
     private boolean displayBagScreen = false;
@@ -71,6 +77,7 @@ public class UI {
     private boolean displaySaveScreen = false;
     private boolean displayOptionMenu = false;
     private boolean displayPokemonStatScreen = false;
+    private boolean displayVolumeScreen = false;
     private final Color partyBackground = new Color(180, 237, 180),
             bagBackground = new Color(218, 219, 147);
 
@@ -96,6 +103,7 @@ public class UI {
 
         throwX = gp.tileSize * 4;
         throwY = gp.tileSize * 5;
+        pauseSelectY = gp.tileSize - 10;
 
     }
 
@@ -186,7 +194,7 @@ public class UI {
                 //TODO: drawSaveScreen();
             }
             if(displayOptionMenu){
-                //TODO: drawOptionMenu();
+                drawOptionMenu();
             }
         }
 
@@ -215,12 +223,14 @@ public class UI {
 
         switch (menuSelection) {
             case POKEDEX -> {
-                drawSelectTriangle(pauseSelectX, gp.tileSize - 10);
+                drawSelectTriangle(pauseSelectX, pauseSelectY);
                 if (gp.keyH.downPressed) {
+                    pauseSelectY += gp.tileSize;
                     menuSelection = PauseMenuOptions.POKEMON;
                     gp.keyH.downPressed = false;
                 }
                 if (gp.keyH.upPressed) {
+                    pauseSelectY = gp.tileSize * 8 - 10;
                     menuSelection = PauseMenuOptions.EXIT;
                     gp.keyH.upPressed = false;
                 }
@@ -231,12 +241,14 @@ public class UI {
                 }
             }
             case POKEMON -> {
-                drawSelectTriangle(pauseSelectX, gp.tileSize * 2 - 10);
+                drawSelectTriangle(pauseSelectX, pauseSelectY);
                 if (gp.keyH.downPressed) {
+                    pauseSelectY += gp.tileSize;
                     menuSelection = PauseMenuOptions.POKEGEAR;
                     gp.keyH.downPressed = false;
                 }
                 if (gp.keyH.upPressed) {
+                    pauseSelectY -= gp.tileSize;
                     menuSelection = PauseMenuOptions.POKEDEX;
                     gp.keyH.upPressed = false;
                 }
@@ -247,12 +259,14 @@ public class UI {
                 }
             }
             case POKEGEAR -> {
-                drawSelectTriangle(pauseSelectX, gp.tileSize * 3 - 10);
+                drawSelectTriangle(pauseSelectX, pauseSelectY);
                 if (gp.keyH.downPressed) {
+                    pauseSelectY += gp.tileSize;
                     menuSelection = PauseMenuOptions.BAG;
                     gp.keyH.downPressed = false;
                 }
                 if (gp.keyH.upPressed) {
+                    pauseSelectY -= gp.tileSize;
                     menuSelection = PauseMenuOptions.POKEMON;
                     gp.keyH.upPressed = false;
                 }
@@ -263,12 +277,14 @@ public class UI {
                 }
             }
             case BAG -> {
-                drawSelectTriangle(pauseSelectX, gp.tileSize * 4 - 10);
+                drawSelectTriangle(pauseSelectX, pauseSelectY);
                 if (gp.keyH.downPressed) {
+                    pauseSelectY += gp.tileSize;
                     menuSelection = PauseMenuOptions.NAME;
                     gp.keyH.downPressed = false;
                 }
                 if (gp.keyH.upPressed) {
+                    pauseSelectY -= gp.tileSize;
                     menuSelection = PauseMenuOptions.POKEGEAR;
                     gp.keyH.upPressed = false;
                 }
@@ -279,28 +295,33 @@ public class UI {
                 }
             }
             case NAME -> {
-                drawSelectTriangle(pauseSelectX, gp.tileSize * 5 - 10);
+                drawSelectTriangle(pauseSelectX, pauseSelectY);
                 if (gp.keyH.downPressed) {
+                    pauseSelectY += gp.tileSize;
                     menuSelection = PauseMenuOptions.SAVE;
                     gp.keyH.downPressed = false;
                 }
                 if (gp.keyH.upPressed) {
+                    pauseSelectY -= gp.tileSize;
                     menuSelection = PauseMenuOptions.BAG;
                     gp.keyH.upPressed = false;
                 }
                 if (gp.keyH.enterPressed) {
+                    pauseSelectY += gp.tileSize;
                     displayCharacterStatScreen = true;
                     //TODO: drawCharacterStatScreen();
                     gp.keyH.enterPressed = false;
                 }
             }
             case SAVE -> {
-                drawSelectTriangle(pauseSelectX, gp.tileSize * 6 - 10);
+                drawSelectTriangle(pauseSelectX, pauseSelectY);
                 if (gp.keyH.downPressed) {
+                    pauseSelectY += gp.tileSize;
                     menuSelection = PauseMenuOptions.OPTION;
                     gp.keyH.downPressed = false;
                 }
                 if (gp.keyH.upPressed) {
+                    pauseSelectY -= gp.tileSize;
                     menuSelection = PauseMenuOptions.NAME;
                     gp.keyH.upPressed = false;
                 }
@@ -311,28 +332,32 @@ public class UI {
                 }
             }
             case OPTION -> {
-                drawSelectTriangle(pauseSelectX, gp.tileSize * 7 - 10);
+                drawSelectTriangle(pauseSelectX, pauseSelectY);
                 if (gp.keyH.downPressed) {
+                    pauseSelectY += gp.tileSize;
                     menuSelection = PauseMenuOptions.EXIT;
                     gp.keyH.downPressed = false;
                 }
                 if (gp.keyH.upPressed) {
+                    pauseSelectY -= gp.tileSize;
                     menuSelection = PauseMenuOptions.SAVE;
                     gp.keyH.upPressed = false;
                 }
                 if (gp.keyH.enterPressed) {
                     displayOptionMenu = true;
-                    //TODO: drawOptionsMenu();
+                    menuSelection = PauseMenuOptions.INNER_MENU;
                     gp.keyH.enterPressed = false;
                 }
             }
             case EXIT -> {
-                drawSelectTriangle(pauseSelectX, gp.tileSize * 8 - 10);
+                drawSelectTriangle(pauseSelectX, pauseSelectY);
                 if (gp.keyH.downPressed) {
+                    pauseSelectY = gp.tileSize - 10;
                     menuSelection = PauseMenuOptions.POKEDEX;
                     gp.keyH.downPressed = false;
                 }
                 if (gp.keyH.upPressed) {
+                    pauseSelectY -= gp.tileSize;
                     menuSelection = PauseMenuOptions.OPTION;
                     gp.keyH.upPressed = false;
                 }
@@ -970,6 +995,43 @@ public class UI {
                     break;
                 }
             }
+        }
+    }
+
+    public void drawOptionMenu(){
+        //VARIABLES
+        int optionMenuX = 12 * gp.tileSize;
+        int optionMenuSelectX = optionMenuX - gp.tileSize / 2;
+
+        //WINDOW AND TEXT
+        drawSubWindow(gp.tileSize * 11, gp.tileSize / 2 - 30, gp.tileSize * 5, gp.tileSize * 9);
+        drawText(OptionMenuOptions.VOLUME.toString(), optionMenuX, gp.tileSize, arial_30, Color.BLACK);
+
+        //OPTION MENU SELECTION
+        switch (optionMenuSelection){
+            case VOLUME -> {
+                drawSelectTriangle(optionMenuSelectX, gp.tileSize - 10);
+                if (gp.keyH.downPressed) {
+                    optionMenuSelection = OptionMenuOptions.VOLUME;
+                    gp.keyH.downPressed = false;
+                }
+                if (gp.keyH.upPressed) {
+                    optionMenuSelection = OptionMenuOptions.VOLUME;
+                    gp.keyH.upPressed = false;
+                }
+                if (gp.keyH.enterPressed) {
+                    displayVolumeScreen = true;
+                    //TODO: drawVolumeScreen();
+                    gp.keyH.enterPressed = false;
+                }
+            }
+        }
+
+        //EXIT
+        if(gp.keyH.escapePressed) {
+            gp.keyH.escapePressed = false;
+            displayOptionMenu = false;
+            menuSelection = PauseMenuOptions.OPTION;
         }
     }
 
