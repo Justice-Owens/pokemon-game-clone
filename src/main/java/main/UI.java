@@ -2,7 +2,6 @@ package main;
 
 import entity.Entity;
 import entity.Player;
-import item.Item;
 import item.PokeballItem;
 import object.GroundObject;
 import util.CatchTool;
@@ -30,7 +29,8 @@ public class UI {
     }
 
     enum OptionMenuOptions{
-        VOLUME
+        AUDIO,
+        VIDEO
     }
 
     enum BagScreenWindows{
@@ -64,11 +64,12 @@ public class UI {
     int partyIndex = 0;
     int pageNum = 0;
     int pauseSelectY;
+    int optionSelectY;
     CatchTool catchTool;
     private int itemIndex = 0;
     private int inventoryIndex = itemIndex;
     private PauseMenuOptions menuSelection = PauseMenuOptions.POKEDEX;
-    private OptionMenuOptions optionMenuSelection = OptionMenuOptions.VOLUME;
+    private OptionMenuOptions optionMenuSelection = OptionMenuOptions.AUDIO;
     private boolean displayPokedexScreen = false;
     private boolean displayPartyScreen = false;
     private boolean displayBagScreen = false;
@@ -104,6 +105,7 @@ public class UI {
         throwX = gp.tileSize * 4;
         throwY = gp.tileSize * 5;
         pauseSelectY = gp.tileSize - 10;
+        optionSelectY = gp.tileSize - 10;
 
     }
 
@@ -345,8 +347,9 @@ public class UI {
                 }
                 if (gp.keyH.enterPressed) {
                     displayOptionMenu = true;
-                    menuSelection = PauseMenuOptions.INNER_MENU;
                     gp.keyH.enterPressed = false;
+                    menuSelection = PauseMenuOptions.INNER_MENU;
+
                 }
             }
             case EXIT -> {
@@ -940,7 +943,7 @@ public class UI {
                     inventoryIndex = 0;
                 }
                 gp.keyH.downPressed = false;
-                if (gp.keyH.upPressed && inventoryIndex > 0) {
+                if (gp.keyH.upPressed && inventoryIndex > 0){
                     inventoryIndex--;
                 } else if (gp.keyH.upPressed){
                     inventoryIndex = pokeballList.size() - 1;
@@ -954,9 +957,9 @@ public class UI {
 
         //EXIT
         if(gp.keyH.escapePressed){
+            menuSelection = PauseMenuOptions.BAG;
             displayBagScreen = false;
             gp.keyH.escapePressed = false;
-            menuSelection = PauseMenuOptions.BAG;
         }
     }
 
@@ -1005,19 +1008,40 @@ public class UI {
 
         //WINDOW AND TEXT
         drawSubWindow(gp.tileSize * 11, gp.tileSize / 2 - 30, gp.tileSize * 5, gp.tileSize * 9);
-        drawText(OptionMenuOptions.VOLUME.toString(), optionMenuX, gp.tileSize, arial_30, Color.BLACK);
+        drawText(OptionMenuOptions.AUDIO.toString(), optionMenuX, gp.tileSize, arial_30, Color.BLACK);
+        drawText(OptionMenuOptions.VIDEO.toString(), optionMenuX, gp.tileSize * 2, arial_30, Color.BLACK);
 
         //OPTION MENU SELECTION
         switch (optionMenuSelection){
-            case VOLUME -> {
-                drawSelectTriangle(optionMenuSelectX, gp.tileSize - 10);
+            case AUDIO -> {
+                drawSelectTriangle(optionMenuSelectX, optionSelectY);
                 if (gp.keyH.downPressed) {
-                    optionMenuSelection = OptionMenuOptions.VOLUME;
+                    optionMenuSelection = OptionMenuOptions.VIDEO;
                     gp.keyH.downPressed = false;
+                    optionSelectY += gp.tileSize;
                 }
                 if (gp.keyH.upPressed) {
-                    optionMenuSelection = OptionMenuOptions.VOLUME;
+                    optionMenuSelection = OptionMenuOptions.VIDEO;
                     gp.keyH.upPressed = false;
+                    optionSelectY = gp.tileSize * 2 - 10;
+                }
+                if (gp.keyH.enterPressed) {
+                    displayVolumeScreen = true;
+                    //TODO: drawVolumeScreen();
+                    gp.keyH.enterPressed = false;
+                }
+            }
+            case VIDEO -> {
+                drawSelectTriangle(optionMenuSelectX, optionSelectY);
+                if (gp.keyH.downPressed) {
+                    optionMenuSelection = OptionMenuOptions.AUDIO;
+                    gp.keyH.downPressed = false;
+                    optionSelectY = gp.tileSize - 10;
+                }
+                if (gp.keyH.upPressed) {
+                    optionMenuSelection = OptionMenuOptions.AUDIO;
+                    gp.keyH.upPressed = false;
+                    optionSelectY -= gp.tileSize;
                 }
                 if (gp.keyH.enterPressed) {
                     displayVolumeScreen = true;
@@ -1028,7 +1052,7 @@ public class UI {
         }
 
         //EXIT
-        if(gp.keyH.escapePressed) {
+        if(gp.keyH.escapePressed){
             gp.keyH.escapePressed = false;
             displayOptionMenu = false;
             menuSelection = PauseMenuOptions.OPTION;

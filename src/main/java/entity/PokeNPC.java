@@ -78,7 +78,7 @@ public class PokeNPC extends Entity{
 
             setDescription((String) statObject.get("description"));
 
-            if(type2 != null){
+            if(!type2.isBlank()){
                 this.hasTwoTypes = true;
             }
 

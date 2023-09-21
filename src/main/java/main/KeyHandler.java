@@ -54,7 +54,7 @@ public class KeyHandler implements KeyListener {
             rightPressed = true;
         }
         // SHORTCUTS
-        if (code == KeyEvent.VK_ESCAPE && !gp.ui.isDisplayBagScreen() && !gp.ui.isDisplayPartyScreen()){
+        if (code == KeyEvent.VK_ESCAPE && !gp.ui.isDisplayBagScreen() && !gp.ui.isDisplayPartyScreen() && !gp.ui.isDisplayOptionMenu()){
                 gp.isPaused = !gp.isPaused;
         }
 
