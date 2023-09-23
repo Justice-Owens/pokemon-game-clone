@@ -239,6 +239,7 @@ public class UI {
         drawTriangle(sliderBarX - gp.tileSize/4, sliderBarY + 15, Color.WHITE, 270);
         drawTriangle(sliderBarX + sliderBarWidth + 15, sliderBarY + 15, Color.WHITE, 90);
 
+        //TODO: fix issue where soundFX is not adjusted. May need to set a silent file to soundFX at run to fix
         switch(volume){
             case 10 -> {
                 if (gp.keyH.leftPressed) {
