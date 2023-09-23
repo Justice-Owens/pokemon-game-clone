@@ -30,7 +30,8 @@ public class UI {
 
     enum OptionMenuOptions{
         AUDIO,
-        VIDEO
+        VIDEO,
+        INNER_MENU
     }
 
     enum BagScreenWindows{
@@ -65,6 +66,8 @@ public class UI {
     int pageNum = 0;
     int pauseSelectY;
     int optionSelectY;
+    int sliderX;
+    int volume = 10;
     CatchTool catchTool;
     private int itemIndex = 0;
     private int inventoryIndex = itemIndex;
@@ -106,6 +109,7 @@ public class UI {
         throwY = gp.tileSize * 5;
         pauseSelectY = gp.tileSize - 10;
         optionSelectY = gp.tileSize - 10;
+        sliderX = gp.tileSize * 13 - 10;
 
     }
 
@@ -198,12 +202,218 @@ public class UI {
             if(displayOptionMenu){
                 drawOptionMenu();
             }
+            if(displayVolumeScreen){
+                drawVolumeScreen();
+            }
         }
 
         if(gp.isBattle){
             gp.isPaused = true;
 //            gp.playMusic("");
             drawBattleScreen();
+        }
+    }
+
+    private void drawVolumeScreen() {
+        int windowX = gp.tileSize * 2;
+        int windowY = gp.tileSize;
+        int windowWidth = gp.tileSize * 13;
+        int windowHeight = gp.tileSize * 9;
+
+        int textX = gp.tileSize * 6 - 20;
+        int textY = gp.tileSize * 3;
+
+        int sliderBarX = gp.tileSize * 3 + 25;
+        int sliderBarY = gp.tileSize * 4 - 20;
+        int sliderBarWidth = gp.tileSize * 10;
+        int sliderBarHeight = gp.tileSize/2;
+        int sliderY = sliderBarY - 5;
+        int sliderHeightWidth = gp.tileSize/2 + 10;
+        int sliderIncrement = gp.tileSize - 3;
+
+        drawSubWindow(windowX, windowY, windowWidth, windowHeight, Color.BLACK);
+        drawText("Master Volume        " + volume, textX, textY, arial_40, Color.WHITE);
+        drawSubWindow(sliderBarX, sliderBarY, sliderBarWidth, sliderBarHeight);
+        drawSubWindow(sliderX, sliderY,sliderHeightWidth, sliderHeightWidth);
+
+        drawTriangle(sliderBarX - gp.tileSize/4, sliderBarY + 15, Color.WHITE, 270);
+        drawTriangle(sliderBarX + sliderBarWidth + 15, sliderBarY + 15, Color.WHITE, 90);
+
+        switch(volume){
+            case 10 -> {
+                if (gp.keyH.leftPressed) {
+                    gp.keyH.leftPressed = false;
+                    volume -= 1;
+                    gp.music.setVolume(0.9f);
+                    gp.soundFX.setVolume(0.9f);
+                    sliderX -= sliderIncrement;
+                }
+                if (gp.keyH.rightPressed) {
+
+                }
+            }
+            case 9 -> {
+                if (gp.keyH.leftPressed) {
+                    gp.keyH.leftPressed = false;
+                    volume -= 1;
+                    gp.music.setVolume(0.8f);
+                    gp.soundFX.setVolume(0.8f);
+                    sliderX -= sliderIncrement;
+                }
+                if (gp.keyH.rightPressed) {
+                    gp.keyH.rightPressed = false;
+                    volume += 1;
+                    gp.music.setVolume(1f);
+                    gp.soundFX.setVolume(1f);
+                    sliderX += sliderIncrement;
+                }
+            }
+            case 8 -> {
+                if (gp.keyH.leftPressed) {
+                    gp.keyH.leftPressed = false;
+                    volume -= 1;
+                    gp.music.setVolume(0.7f);
+                    gp.soundFX.setVolume(0.7f);
+                    sliderX -= sliderIncrement;
+                }
+                if (gp.keyH.rightPressed) {
+                    gp.keyH.rightPressed = false;
+                    volume += 1;
+                    gp.music.setVolume(0.9f);
+                    gp.soundFX.setVolume(0.9f);
+                    sliderX += sliderIncrement;
+                }
+            }
+            case 7 -> {
+                if (gp.keyH.leftPressed) {
+                    gp.keyH.leftPressed = false;
+                    volume -= 1;
+                    gp.music.setVolume(0.6f);
+                    gp.soundFX.setVolume(0.6f);
+                    sliderX -= sliderIncrement;
+                }
+                if (gp.keyH.rightPressed) {
+                    gp.keyH.rightPressed = false;
+                    volume += 1;
+                    gp.music.setVolume(0.8f);
+                    gp.soundFX.setVolume(0.8f);
+                    sliderX += sliderIncrement;
+                }
+            }
+            case 6 -> {
+                if (gp.keyH.leftPressed) {
+                    gp.keyH.leftPressed = false;
+                    volume -= 1;
+                    gp.music.setVolume(0.5f);
+                    gp.soundFX.setVolume(0.5f);
+                    sliderX -= sliderIncrement;
+                }
+                if (gp.keyH.rightPressed) {
+                    gp.keyH.rightPressed = false;
+                    volume += 1;
+                    gp.music.setVolume(0.7f);
+                    gp.soundFX.setVolume(0.7f);
+                    sliderX += sliderIncrement;
+                }
+            }
+            case 5 -> {
+                if (gp.keyH.leftPressed) {
+                    gp.keyH.leftPressed = false;
+                    volume -= 1;
+                    gp.music.setVolume(0.4f);
+                    gp.soundFX.setVolume(0.4f);
+                    sliderX -= sliderIncrement;
+                }
+                if (gp.keyH.rightPressed) {
+                    gp.keyH.rightPressed = false;
+                    volume += 1;
+                    gp.music.setVolume(0.6f);
+                    gp.soundFX.setVolume(0.6f);
+                    sliderX += sliderIncrement;
+                }
+            }
+            case 4 -> {
+                if (gp.keyH.leftPressed) {
+                    gp.keyH.leftPressed = false;
+                    volume -= 1;
+                    gp.music.setVolume(0.3f);
+                    gp.soundFX.setVolume(0.3f);
+                    sliderX -= sliderIncrement;
+                }
+                if (gp.keyH.rightPressed) {
+                    gp.keyH.rightPressed = false;
+                    volume += 1;
+                    gp.music.setVolume(0.5f);
+                    gp.soundFX.setVolume(0.5f);
+                    sliderX += sliderIncrement;
+                }
+            }
+            case 3 -> {
+                if (gp.keyH.leftPressed) {
+                    gp.keyH.leftPressed = false;
+                    volume -= 1;
+                    gp.music.setVolume(0.2f);
+                    gp.soundFX.setVolume(0.2f);
+                    sliderX -= sliderIncrement;
+                }
+                if (gp.keyH.rightPressed) {
+                    gp.keyH.rightPressed = false;
+                    volume += 1;
+                    gp.music.setVolume(0.4f);
+                    gp.soundFX.setVolume(0.4f);
+                    sliderX += sliderIncrement;
+                }
+            }
+            case 2 -> {
+                if (gp.keyH.leftPressed) {
+                    gp.keyH.leftPressed = false;
+                    volume -= 1;
+                    gp.music.setVolume(0.1f);
+                    gp.soundFX.setVolume(0.1f);
+                    sliderX -= sliderIncrement;
+                }
+                if (gp.keyH.rightPressed) {
+                    gp.keyH.rightPressed = false;
+                    volume += 1;
+                    gp.music.setVolume(0.3f);
+                    gp.soundFX.setVolume(0.3f);
+                    sliderX += sliderIncrement;
+                }
+            }
+            case 1 -> {
+                if (gp.keyH.leftPressed) {
+                    gp.keyH.leftPressed = false;
+                    volume -= 1;
+                    gp.music.setVolume(0.0f);
+                    gp.soundFX.setVolume(0.0f);
+                    sliderX -= sliderIncrement;
+                }
+                if (gp.keyH.rightPressed) {
+                    gp.keyH.rightPressed = false;
+                    volume += 1;
+                    gp.music.setVolume(0.2f);
+                    gp.soundFX.setVolume(0.2f);
+                    sliderX += sliderIncrement;
+                }
+            }
+            case 0 -> {
+                if (gp.keyH.leftPressed) {
+                }
+                if (gp.keyH.rightPressed) {
+                    gp.keyH.rightPressed = false;
+                    volume += 1;
+                    gp.music.setVolume(0.1f);
+                    gp.soundFX.setVolume(0.1f);
+                    sliderX += sliderIncrement;
+                }
+            }
+        }
+
+        //EXIT
+        if(gp.keyH.escapePressed){
+            gp.keyH.escapePressed = false;
+            displayVolumeScreen = false;
+            optionMenuSelection = OptionMenuOptions.AUDIO;
         }
     }
 
@@ -650,6 +860,29 @@ public class UI {
         g2.drawPolygon(triangle);
     }
 
+    public void drawTriangle(int x, int y, Color color, int degreesRotated){
+        g2.setColor(color);
+        Polygon triangle = new Polygon();
+        triangle.npoints = 3;
+
+        if(degreesRotated == 0){
+            triangle.xpoints = new int[]{x, x + 3, x + 6};
+            triangle.ypoints = new int[]{y, y, y+5};
+        } else if(degreesRotated == 90){
+            triangle.xpoints = new int[]{x, x, x+6};
+            triangle.ypoints = new int[]{y, y-6, y-3};
+        } else if (degreesRotated == 180){
+            triangle.xpoints = new int[]{x, x+3, x+6};
+            triangle.ypoints = new int[]{y, y, y-5};
+        } else if(degreesRotated == 270){
+            triangle.xpoints = new int[]{x, x, x-6};
+            triangle.ypoints = new int[]{y, y-6, y-3};
+        }
+
+        g2.draw(triangle);
+
+    }
+
     public void drawSprite(BufferedImage image, int x, int y, int width, int height){
         g2.drawImage(image, x, y, width, height, null);
     }
@@ -1027,7 +1260,7 @@ public class UI {
                 }
                 if (gp.keyH.enterPressed) {
                     displayVolumeScreen = true;
-                    //TODO: drawVolumeScreen();
+                    optionMenuSelection = OptionMenuOptions.INNER_MENU;
                     gp.keyH.enterPressed = false;
                 }
             }
@@ -1045,14 +1278,13 @@ public class UI {
                 }
                 if (gp.keyH.enterPressed) {
                     displayVolumeScreen = true;
-                    //TODO: drawVolumeScreen();
                     gp.keyH.enterPressed = false;
                 }
             }
         }
 
         //EXIT
-        if(gp.keyH.escapePressed){
+        if(gp.keyH.escapePressed && !isDisplayVolumeScreen()){
             gp.keyH.escapePressed = false;
             displayOptionMenu = false;
             menuSelection = PauseMenuOptions.OPTION;
@@ -1122,4 +1354,13 @@ public class UI {
     public void setDisplayPokemonStatScreen(boolean displayPokemonStatScreen) {
         this.displayPokemonStatScreen = displayPokemonStatScreen;
     }
+
+    public boolean isDisplayVolumeScreen() {
+        return displayVolumeScreen;
+    }
+
+    public void setDisplayVolumeScreen(boolean displayVolumeScreen) {
+        this.displayVolumeScreen = displayVolumeScreen;
+    }
+
 }
